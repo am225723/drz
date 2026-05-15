@@ -1,34 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  AlertTriangle,
-  ArrowRight,
-  BookOpen,
-  Brain,
-  Calendar,
-  CheckCircle2,
-  ChevronDown,
-  CreditCard,
-  ExternalLink,
-  FileText,
-  HelpCircle,
-  Home,
-  Leaf,
-  LockKeyhole,
-  Mail,
-  MapPin,
-  Menu,
-  MessageCircle,
-  Monitor,
-  Phone,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Stethoscope,
-  UserRound,
-  Users,
-  X,
+  AlertTriangle, ArrowRight, BookOpen, Brain, Calendar, CheckCircle2,
+  ChevronDown, CreditCard, ExternalLink, FileText, HelpCircle, Home,
+  Leaf, LockKeyhole, Mail, MapPin, Menu, MessageCircle, Monitor,
+  Phone, Search, ShieldCheck, Sparkles, Stethoscope, UserRound, Users, X,
 } from 'lucide-react';
+
+const BRAND = {
+  deep: '#173f42',
+  teal: '#2f8c85',
+  mint: '#9fcf9a',
+  pale: '#edf8f1',
+};
 
 const PRACTICE = {
   name: 'Integrative Psychiatry',
@@ -38,6 +22,11 @@ const PRACTICE = {
   phone: '860-615-3629',
   email: 'support@drzelisko.com',
   location: 'West Hartford, Connecticut',
+};
+
+const ASSETS = {
+  logo: '/logo.png',
+  headshot: '/headshot.jpeg',
 };
 
 const INTAKEQ = {
@@ -54,50 +43,10 @@ const LINKS = {
 };
 
 const BOOKING_OPTIONS = [
-  {
-    key: 'evaluation-virtual',
-    label: 'Evaluation · Virtual',
-    title: 'Virtual Psychiatric Evaluation Intake',
-    subtitle: 'Start care with a comprehensive telehealth evaluation.',
-    href: LINKS.evaluationVirtual,
-    serviceId: '58193299-cfce-4354-b509-ce89f4aec3dc',
-    icon: Monitor,
-    badge: 'New patient',
-    tone: 'from-emerald-500 via-teal-500 to-sky-500',
-  },
-  {
-    key: 'evaluation-office',
-    label: 'Evaluation · In Office',
-    title: 'In-Office Psychiatric Evaluation Intake',
-    subtitle: 'Begin care in a thoughtful, in-person setting in West Hartford.',
-    href: LINKS.evaluationOffice,
-    serviceId: 'f5586c2c-2dbd-4a55-878a-df83394ce608',
-    icon: MapPin,
-    badge: 'New patient',
-    tone: 'from-amber-400 via-emerald-500 to-teal-600',
-  },
-  {
-    key: 'follow-up-office',
-    label: 'Follow-Up · In Office',
-    title: 'In-Office Follow-Up',
-    subtitle: 'Schedule an established-patient follow-up at the office.',
-    href: LINKS.followUpOffice,
-    serviceId: '20ee08a2-0586-4719-83fa-599c5aea1fc2',
-    icon: Users,
-    badge: 'Current patient',
-    tone: 'from-slate-700 via-emerald-700 to-teal-600',
-  },
-  {
-    key: 'follow-up-virtual',
-    label: 'Follow-Up · Virtual',
-    title: 'Virtual Follow-Up',
-    subtitle: 'Continue established care by secure telehealth follow-up.',
-    href: LINKS.followUpVirtual,
-    serviceId: '57f67047-59ad-4edf-8ab1-db9f0c072bad',
-    icon: Monitor,
-    badge: 'Current patient',
-    tone: 'from-indigo-500 via-emerald-600 to-teal-500',
-  },
+  { key: 'evaluation-virtual', label: 'Evaluation · Virtual', title: 'Virtual Psychiatric Evaluation Intake', subtitle: 'Start care with a comprehensive telehealth evaluation.', href: LINKS.evaluationVirtual, serviceId: '58193299-cfce-4354-b509-ce89f4aec3dc', icon: Monitor, badge: 'New patient', tone: 'from-[#9fcf9a] via-[#2f8c85] to-[#173f42]' },
+  { key: 'evaluation-office', label: 'Evaluation · In Office', title: 'In-Office Psychiatric Evaluation Intake', subtitle: 'Begin care in a thoughtful, in-person setting in West Hartford.', href: LINKS.evaluationOffice, serviceId: 'f5586c2c-2dbd-4a55-878a-df83394ce608', icon: MapPin, badge: 'New patient', tone: 'from-[#d6e7c7] via-[#9fcf9a] to-[#2f8c85]' },
+  { key: 'follow-up-office', label: 'Follow-Up · In Office', title: 'In-Office Follow-Up', subtitle: 'Schedule an established-patient follow-up at the office.', href: LINKS.followUpOffice, serviceId: '20ee08a2-0586-4719-83fa-599c5aea1fc2', icon: Users, badge: 'Current patient', tone: 'from-[#173f42] via-[#2f8c85] to-[#9fcf9a]' },
+  { key: 'follow-up-virtual', label: 'Follow-Up · Virtual', title: 'Virtual Follow-Up', subtitle: 'Continue established care by secure telehealth follow-up.', href: LINKS.followUpVirtual, serviceId: '57f67047-59ad-4edf-8ab1-db9f0c072bad', icon: Monitor, badge: 'Current patient', tone: 'from-[#24565a] via-[#2f8c85] to-[#9fcf9a]' },
 ];
 
 const PAGES = [
@@ -113,277 +62,80 @@ const PAGES = [
   { id: 'contact', path: '/contact', label: 'Contact', icon: Mail },
 ];
 
-const TRAINING = [
-  'Amherst College',
-  'St. George’s University School of Medicine',
-  'Psychiatry residency at UConn School of Medicine',
-  'Board-certified psychiatrist',
-];
-
-const APPROACH_POINTS = [
-  'Psychotherapy and counseling',
-  'Medication management',
-  'Nutraceutical and supplement review',
-  'Genetic insights when clinically useful',
-  'Comprehensive lifestyle coaching',
-  'Holistic health assessments',
-];
-
 const SERVICES = [
   { icon: FileText, title: 'Psychiatric Evaluations', text: 'In-depth diagnostic clarification and treatment planning.' },
   { icon: Stethoscope, title: 'Medication Management', text: 'Thoughtful prescribing within a broader treatment plan.' },
-  { icon: MessageCircle, title: 'Psychotherapy', text: 'Reflective therapy for deeper understanding and change.' },
-  { icon: Leaf, title: 'Integrative Psychiatry', text: 'Whole-person care that considers mind, body, and spirit.' },
-  { icon: Leaf, title: 'Nutraceutical Support', text: 'Supplement and lifestyle review when clinically appropriate.' },
+  { icon: MessageCircle, title: 'Psychotherapy & Counseling', text: 'Reflective therapy for deeper understanding, communication, and change.' },
+  { icon: Leaf, title: 'Integrative Psychiatry', text: 'Whole-person care that considers mind, body, lifestyle, and spirit.' },
   { icon: Sparkles, title: 'Ketamine-Assisted Psychotherapy', text: 'A carefully screened option for selected patients.' },
   { icon: Search, title: 'Second Opinions', text: 'A fresh look when diagnosis or treatment feels unclear.' },
 ];
 
+const TRAINING = ['Amherst College', 'St. George’s University School of Medicine', 'Psychiatry residency at UConn School of Medicine', 'Board-certified psychiatrist'];
+const APPROACH_POINTS = ['Psychotherapy and counseling', 'Medication management', 'Genetic insights when clinically useful', 'Comprehensive lifestyle coaching', 'Holistic health assessments', 'Respect for patient autonomy'];
+
+const FAQ_GROUPS = [
+  { title: 'Holistic Care for Mental Wellness', items: [
+    ['What is Integrative Psychiatry?', 'Integrative Psychiatry is a comprehensive, personalized approach to mental wellness that considers the whole person—mind, body, and spirit. It blends evidence-based medicine such as psychotherapy and pharmacology with complementary tools such as nutritional support, lifestyle coaching, and functional assessment when clinically appropriate.'],
+    ['What is your core philosophy?', 'Our philosophy centers on moving beyond symptom management to understand the complete picture of your health. Care is collaborative, respectful of autonomy, and designed around your goals, values, and life circumstances.'],
+    ['How is your approach different from traditional psychiatry?', 'The approach is broader and more in-depth. Longer sessions allow time to understand your story, lifestyle, physical health, belief systems, and treatment goals. When clinically useful, treatment planning may include psychotherapy, medication, genetic testing, functional assessment, and lifestyle changes.'],
+  ] },
+  { title: 'Our Philosophy of Care', items: [
+    ['Who is Dr. Douglas Zelisko (Dr. Z)?', 'Dr. Douglas Zelisko, or Dr. Z, is the board-certified psychiatrist who leads the practice. He is passionate about holistic mental health care and treats patients as whole individuals, not collections of symptoms. He enjoys road biking, running, and discovering mid-century modern design.'],
+    ['What are Dr. Z’s qualifications?', 'Dr. Z earned his undergraduate degree from Amherst College and his MD from St. George’s University School of Medicine. He completed Psychiatry Residency at UConn School of Medicine.'],
+  ] },
+  { title: 'Services & Conditions Treated', items: [
+    ['What types of services do you offer?', 'Services include psychiatric evaluations, diagnostic assessments, second-opinion consultations, individual psychotherapy, couples counseling, medication management, supplement review, ketamine-assisted psychotherapy, smoking cessation, relapse prevention, and selected wellness/lifestyle support.'],
+    ['What is Ketamine-Assisted Psychotherapy?', 'Ketamine-Assisted Psychotherapy is a specialized therapeutic modality that may be considered for selected patients after careful evaluation, medical screening, preparation, informed consent, and monitoring. It is not appropriate for everyone.'],
+    ['What conditions do you commonly treat?', 'Common concerns include depression, anxiety, mood disorders, PTSD and trauma, ADD/ADHD, eating disorders, substance use disorders, sleep disorders, women’s and men’s health concerns, gut dysbiosis, and psych-oncology support.'],
+    ['Do you work with couples?', 'Yes. Couples counseling offers a supportive space for partners to navigate challenges, improve communication, and strengthen their relationship.'],
+  ] },
+  { title: 'Getting Started & Logistics', items: [
+    ['How can I learn more or schedule my first appointment?', 'New patients can book a Psychiatric Evaluation Intake Appointment directly online. Choose virtual or in-office scheduling from the New Patients page.'],
+    ['What should I expect during my first full appointment?', 'The first comprehensive evaluation is an in-depth session designed to understand you as a whole person, including personal and family history, current challenges, lifestyle factors such as diet, sleep, and exercise, and your goals for treatment.'],
+    ['How long are typical appointments?', 'Sessions are longer than the industry standard, ranging from 30 minutes for some follow-up and management appointments to 2 hours for initial comprehensive evaluations or in-depth psychotherapy sessions.'],
+    ['Do you accept insurance?', 'The practice may operate out-of-network and may provide superbills for potential out-of-network reimbursement. Insurance-based options may also be available through partner platforms for eligible plans. Please verify before scheduling.'],
+    ['Where is Integrative Psychiatry located?', 'The public website footer lists 45 South Main Street, Suite 111, West Hartford, CT 06107. Some older site content may list a prior address; please rely on the current booking and portal details.'],
+    ['How can I contact the office?', `You can reach the office by phone at ${PRACTICE.phone} or by email at ${PRACTICE.email}.`],
+  ] },
+];
+
 const PAGE_BY_PATH = Object.fromEntries(PAGES.map((page) => [page.path, page.id]));
 const PATH_BY_PAGE = Object.fromEntries(PAGES.map((page) => [page.id, page.path]));
-
-function getPageFromPath() {
-  if (typeof window === 'undefined') return 'home';
-  return PAGE_BY_PATH[window.location.pathname] || 'home';
-}
-
-function runDataChecks() {
-  const ids = new Set(PAGES.map((page) => page.id));
-  console.assert(ids.size === PAGES.length, 'Page IDs must be unique.');
-  console.assert(BOOKING_OPTIONS.length === 4, 'All four IntakeQ booking services should be configured.');
-  console.assert(BOOKING_OPTIONS.every((option) => option.serviceId && option.href.startsWith('https://')), 'Each booking option needs an HTTPS link and service ID.');
-  console.assert(TRAINING.includes('Amherst College'), 'Dr. Z training details should include Amherst College.');
-}
-runDataChecks();
+function getPageFromPath() { return typeof window === 'undefined' ? 'home' : PAGE_BY_PATH[window.location.pathname] || 'home'; }
 
 function Button({ children, onClick, href, variant = 'primary', className = '', external = false }) {
   const base = 'inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition';
-  const styles = {
-    primary: 'bg-emerald-900 text-white hover:bg-emerald-800',
-    dark: 'bg-slate-950 text-white hover:bg-slate-800',
-    outline: 'border border-slate-300 bg-white text-slate-950 hover:bg-slate-50',
-    ghost: 'bg-transparent text-slate-700 hover:bg-slate-100',
-    light: 'border border-white/30 bg-white text-emerald-950 hover:bg-emerald-50',
-  }[variant];
+  const styles = { primary: 'bg-[#173f42] text-white hover:bg-[#24565a]', dark: 'bg-slate-950 text-white hover:bg-slate-800', outline: 'border border-slate-300 bg-white text-slate-950 hover:bg-slate-50', ghost: 'bg-transparent text-slate-700 hover:bg-slate-100', light: 'border border-white/30 bg-white text-[#173f42] hover:bg-[#edf8f1]' }[variant];
   if (href) return <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined} className={`${base} ${styles} ${className}`}>{children}</a>;
   return <button onClick={onClick} className={`${base} ${styles} ${className}`}>{children}</button>;
 }
+function ExternalButton(props) { return <Button {...props} external>{props.children}<ExternalLink className="ml-2 h-4 w-4" /></Button>; }
+function Card({ children, className = '' }) { return <div className={`rounded-[1.75rem] border border-slate-200 bg-white shadow-sm ${className}`}>{children}</div>; }
+function Section({ children, className = '' }) { return <section className={`py-20 ${className}`}><div className="mx-auto max-w-7xl px-6 lg:px-8">{children}</div></section>; }
+function SectionHeading({ eyebrow, title, subtitle }) { return <div className="mx-auto mb-12 max-w-3xl text-center">{eyebrow && <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#2f8c85]">{eyebrow}</p>}<h2 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{title}</h2>{subtitle && <p className="mt-4 text-lg leading-8 text-slate-700">{subtitle}</p>}</div>; }
+function PageHero({ eyebrow, title, subtitle, icon: Icon }) { return <section className="bg-[radial-gradient(circle_at_top_left,#edf8f1,transparent_40%),linear-gradient(180deg,#ffffff,#f8fafc)] py-20"><div className="mx-auto max-w-5xl px-6 text-center">{Icon && <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#173f42] text-white"><Icon className="h-8 w-8" /></div>}<p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-[#2f8c85]">{eyebrow}</p><h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{title}</h1>{subtitle && <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-700">{subtitle}</p>}</div></section>; }
 
-function ExternalButton({ href, children, variant = 'primary', className = '' }) {
-  return <Button href={href} external variant={variant} className={className}>{children}<ExternalLink className="ml-2 h-4 w-4" /></Button>;
-}
+function Header({ page, navigate }) { const [open, setOpen] = useState(false); const go = (id) => { setOpen(false); navigate(id); }; return <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl"><div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8"><button onClick={() => go('home')} className="flex items-center gap-3 text-left"><img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="h-12 w-12 rounded-2xl object-contain" onError={(e)=>{e.currentTarget.style.display='none'}} /><div><p className="text-sm font-semibold text-[#173f42]">{PRACTICE.name}</p><p className="text-xs text-slate-600">{PRACTICE.doctor}</p></div></button><nav className="hidden items-center gap-5 lg:flex">{PAGES.slice(0,7).map((item)=><button key={item.id} onClick={()=>go(item.id)} className={`text-sm font-medium ${page===item.id?'text-[#2f8c85]':'text-slate-700 hover:text-slate-950'}`}>{item.label}</button>)}</nav><div className="hidden items-center gap-3 lg:flex"><Button href={LINKS.portal} external variant="ghost"><LockKeyhole className="mr-2 h-4 w-4" /> Portal</Button><Button onClick={()=>go('new-patients')}>Book Now</Button></div><Button variant="outline" className="lg:hidden" onClick={()=>setOpen(!open)}>{open?<X className="h-4 w-4"/>:<Menu className="h-4 w-4"/>}</Button></div>{open&&<div className="border-t border-slate-200 bg-white px-6 py-5 lg:hidden"><div className="grid gap-2">{PAGES.map((item)=>{const Icon=item.icon; return <button key={item.id} onClick={()=>go(item.id)} className="flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-slate-700"><Icon className="h-4 w-4"/> {item.label}</button>})}</div></div>}</header>; }
+function Footer({ navigate }) { return <footer className="border-t border-slate-200 bg-white py-10"><div className="mx-auto grid max-w-7xl gap-8 px-6 text-sm text-slate-600 lg:grid-cols-2 lg:px-8"><div><p className="font-semibold text-[#173f42]">{PRACTICE.name} | {PRACTICE.doctor}</p><p className="mt-2">{PRACTICE.address}</p><p>{PRACTICE.phone} · {PRACTICE.email}</p><div className="mt-5 flex flex-wrap gap-3">{PAGES.slice(0,7).map((item)=><button key={item.id} onClick={()=>navigate(item.id)} className="hover:text-slate-950">{item.label}</button>)}<a href={LINKS.portal} target="_blank" rel="noreferrer" className="hover:text-slate-950">Patient Portal</a></div></div><div className="lg:text-right"><p>This website provides general information and is not medical advice.</p><p className="mt-4">© {new Date().getFullYear()} Integrative Psychiatry. All rights reserved.</p></div></div></footer>; }
 
-function Card({ children, className = '' }) {
-  return <div className={`rounded-[1.75rem] border border-slate-200 bg-white shadow-sm ${className}`}>{children}</div>;
-}
+function IntakeQWidget({ option }) { useEffect(()=>{ if(!option||typeof document==='undefined') return; const c=document.getElementById('intakeq'); if(c)c.innerHTML=''; document.querySelectorAll('script[data-intakeq-widget="true"]').forEach((s)=>s.remove()); window.intakeq=INTAKEQ.accountId; window.intakeqServiceId=option.serviceId; const script=document.createElement('script'); script.type='text/javascript'; script.async=true; script.src=INTAKEQ.scriptSrc; script.dataset.intakeqWidget='true'; document.head.appendChild(script); },[option]); return <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-white shadow-2xl shadow-[#173f42]/20"><div className={`h-2 bg-gradient-to-r ${option.tone}`} /><div className="grid gap-0 lg:grid-cols-[0.42fr_0.58fr]"><div className="relative overflow-hidden bg-[#173f42] p-8 text-white"><p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d6e7c7]">PracticeQ booking scheduler</p><h3 className="mt-4 text-3xl font-semibold tracking-tight text-white">{option.title}</h3><p className="mt-4 leading-7 text-slate-100">Secure scheduling is powered by IntakeQ / PracticeQ.</p><div className="mt-8 space-y-3 text-sm text-white">{['Secure IntakeQ widget', option.badge + ' scheduling path', 'Direct fallback link included'].map((item)=><div key={item} className="flex items-center gap-3 text-white"><CheckCircle2 className="h-5 w-5 text-[#9fcf9a]"/><span className="text-white">{item}</span></div>)}</div><ExternalButton href={option.href} variant="light" className="mt-8 w-full">Open in New Window</ExternalButton></div><div className="bg-[radial-gradient(circle_at_top,#edf8f1,transparent_35%),#ffffff] p-4 sm:p-6"><div className="mx-auto max-w-[720px] rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-inner shadow-slate-100"><div id="intakeq" style={{maxWidth:'720px',width:'100%'}} /></div><p className="mt-4 text-center text-sm text-slate-500">If the scheduler does not load, <a href={option.href} target="_blank" rel="noreferrer" className="font-semibold text-[#173f42] underline">open the secure booking page</a>.</p></div></div></div>; }
+function BookingCard({ option, selected, onSelect }) { const Icon=option.icon; return <motion.button type="button" onClick={()=>onSelect(option.key)} whileHover={{y:-6}} whileTap={{scale:.99}} className={`group relative overflow-hidden rounded-[2rem] border p-[1px] text-left shadow-xl transition ${selected?'border-[#9fcf9a] shadow-[#173f42]/20':'border-slate-200 shadow-slate-200/80 hover:border-[#9fcf9a]'}`}><div className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${option.tone}`} /><div className="relative h-full rounded-[1.95rem] bg-white p-6"><div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${option.tone} opacity-10 blur-2xl transition group-hover:opacity-20`} /><div className="flex items-start justify-between gap-4"><div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${option.tone} text-white shadow-lg`}><Icon className="h-7 w-7"/></div><span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${selected?'bg-[#173f42] text-white':'bg-slate-100 text-slate-600'}`}>{option.badge}</span></div><h3 className="mt-6 text-2xl font-semibold text-slate-950">{option.title}</h3><p className="mt-3 leading-7 text-slate-600">{option.subtitle}</p><div className="mt-6 flex items-center justify-between text-sm font-semibold text-[#2f8c85]"><span>{selected?'Selected appointment':'Select appointment'}</span><ArrowRight className="h-4 w-4 transition group-hover:translate-x-1"/></div></div></motion.button>; }
+function BookingExperience({ defaultKey='evaluation-virtual', mode='all' }) { const options=mode==='new'?BOOKING_OPTIONS.slice(0,2):mode==='current'?BOOKING_OPTIONS.slice(2):BOOKING_OPTIONS; const [selectedKey,setSelectedKey]=useState(defaultKey); const selected=options.find(o=>o.key===selectedKey)||options[0]; return <div className="relative"><div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-gradient-to-br from-[#edf8f1] via-white to-[#d6e7c7] blur-3xl"/><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">{options.map((o)=><BookingCard key={o.key} option={o} selected={selected.key===o.key} onSelect={setSelectedKey}/>)}</div><div className="mt-8"><IntakeQWidget option={selected}/></div></div>; }
 
-function Section({ children, className = '' }) {
-  return <section className={`py-20 ${className}`}><div className="mx-auto max-w-7xl px-6 lg:px-8">{children}</div></section>;
-}
+function HomePage({ navigate }) { return <><section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,#edf8f1,transparent_38%),linear-gradient(180deg,#ffffff,#f8fafc)] py-20 sm:py-28"><div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_.95fr] lg:px-8"><motion.div initial={{opacity:0,y:16}} animate={{opacity:1,y:0}}><img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="mb-6 h-24 w-24 object-contain" onError={(e)=>{e.currentTarget.style.display='none'}}/><div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#9fcf9a] bg-white px-4 py-2 text-sm text-[#173f42] shadow-sm"><ShieldCheck className="h-4 w-4"/> Board-certified psychiatry in Connecticut</div><h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl">Holistic psychiatry rooted in you.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-700">Personalized care that considers the whole you—mind, body, and spirit. {PRACTICE.doctor} provides integrative psychiatric care, psychotherapy, and medication management for adults in Connecticut.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button onClick={()=>navigate('new-patients')} variant="dark">Book Evaluation <ArrowRight className="ml-2 h-4 w-4"/></Button><Button onClick={()=>navigate('current-patients')} variant="outline">Current Patient Follow-Up</Button></div></motion.div><div className="relative"><div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-[#9fcf9a]/30 to-[#173f42]/20 blur-2xl"/><img src={ASSETS.headshot} alt="Dr. Douglas Zelisko portrait" className="relative mx-auto max-h-[560px] rounded-[2rem] object-cover shadow-2xl" onError={(e)=>{e.currentTarget.style.display='none'}}/></div></div></section><BookingOverview navigate={navigate}/><ServicePreview navigate={navigate}/></>; }
+function BookingOverview({ navigate }) { return <Section className="bg-slate-50"><SectionHeading eyebrow="Appointments" title="A beautiful, secure way to schedule." subtitle="Select the appointment path that fits, then complete the official IntakeQ booking widget right on the page."/><BookingExperience mode="all" defaultKey="evaluation-virtual"/><div className="mt-8 text-center"><Button onClick={()=>navigate('current-patients')} variant="outline">View Follow-Up Booking Options</Button></div></Section>; }
+function ServicePreview({ navigate }) { return <Section><SectionHeading eyebrow="Services" title="Comprehensive care solutions." subtitle="Psychotherapy, medication management, evaluations, lifestyle recommendations, and other integrative options."/><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{SERVICES.map((s)=>{const Icon=s.icon; return <Card key={s.title} className="transition hover:-translate-y-1 hover:shadow-xl"><div className="p-7"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf8f1] text-[#173f42]"><Icon className="h-6 w-6"/></div><h3 className="mt-5 text-xl font-semibold text-slate-950">{s.title}</h3><p className="mt-3 leading-7 text-slate-600">{s.text}</p></div></Card>})}</div><div className="mt-10 text-center"><Button onClick={()=>navigate('services')} variant="outline">View All Services</Button></div></Section>; }
 
-function PageHero({ eyebrow, title, subtitle, icon: Icon }) {
-  return (
-    <section className="bg-[radial-gradient(circle_at_top_left,#ecfdf5,transparent_40%),linear-gradient(180deg,#ffffff,#f8fafc)] py-20">
-      <div className="mx-auto max-w-5xl px-6 text-center">
-        {Icon && <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald-950 text-white"><Icon className="h-8 w-8" /></div>}
-        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">{eyebrow}</p>
-        <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">{title}</h1>
-        {subtitle && <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-700">{subtitle}</p>}
-      </div>
-    </section>
-  );
-}
+function AboutPage() { return <><PageHero icon={UserRound} eyebrow="Meet Dr. Z" title="Your partner in healing." subtitle="Dr. Douglas Zelisko, affectionately known as Dr. Z, is a board-certified psychiatrist with a deep commitment to holistic, personalized mental health care."/><Section><div className="grid gap-10 lg:grid-cols-[.85fr_1.15fr]"><Card className="bg-slate-50"><div className="p-8"><img src={ASSETS.headshot} alt="Dr. Douglas Zelisko" className="h-64 w-full rounded-[1.5rem] object-cover object-top" onError={(e)=>{e.currentTarget.style.display='none'}}/><h3 className="mt-6 text-2xl font-semibold text-slate-950">{PRACTICE.doctor}</h3><p className="mt-2 text-slate-600">Board-certified psychiatrist</p><div className="mt-6 space-y-3 text-sm text-slate-700">{TRAINING.map((item)=><p key={item} className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-[#2f8c85]"/> {item}</p>)}</div></div></Card><div className="space-y-6 text-lg leading-8 text-slate-700"><p>Leading the practice is Dr. Douglas Zelisko, known warmly as Dr. Z. He brings a passion for holistic mental health care and a thoughtful, patient-centered style to every interaction. His approach is grounded in treating each person as a whole individual, not simply a list of symptoms.</p><p>Dr. Zelisko’s academic foundation includes degrees from Amherst College and St. George’s University School of Medicine, followed by psychiatry residency training at UConn School of Medicine.</p><p>In treatment, Dr. Z integrates psychotherapy, medication management, genetic insights when clinically useful, and comprehensive lifestyle coaching. The goal is to support each person’s unique journey with care that is collaborative, respectful of autonomy, and tailored to real-life goals.</p><p>Beyond his clinical work, Dr. Z enjoys road biking, running, and discovering mid-century modern design treasures.</p></div></div></Section><Section className="bg-slate-50"><SectionHeading eyebrow="Treatment Philosophy" title="Holistic care that respects autonomy and context." subtitle="The practice blends evidence-based psychiatry with a wider view of mind, body, lifestyle, identity, and meaning."/><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{APPROACH_POINTS.map((item)=><Card key={item}><div className="p-6"><CheckCircle2 className="h-6 w-6 text-[#2f8c85]"/><h3 className="mt-4 text-lg font-semibold text-slate-950">{item}</h3></div></Card>)}</div></Section></>; }
+function ServicesPage({ navigate }) { return <><PageHero icon={Stethoscope} eyebrow="Services" title="Comprehensive care solutions." subtitle="Personalized care for a broad spectrum of concerns, delivered through an integrative, whole-person lens."/><ServicePreview navigate={navigate}/></>; }
+function KetaminePage({ navigate }) { return <><PageHero icon={Sparkles} eyebrow="Ketamine-Assisted Psychotherapy" title="A careful, clinically guided option for selected patients." subtitle="Ketamine-assisted psychotherapy may be considered only after evaluation, screening, preparation, informed consent, and safety review."/><Section><div className="grid gap-8 lg:grid-cols-[1fr_.8fr]"><div className="space-y-6 text-lg leading-8 text-slate-700"><p>Ketamine-assisted psychotherapy may be considered for carefully selected adults after psychiatric evaluation, medical screening, preparation, informed consent, and monitoring.</p><p>The psychotherapy component matters. Preparation and integration can help patients make sense of the experience and connect insights to daily life.</p></div><Card className="bg-[#173f42] text-white shadow-xl"><div className="p-8"><h3 className="text-2xl font-semibold text-white">A responsible process includes:</h3><div className="mt-6 space-y-4">{['Clinical evaluation','Medical and medication review','Informed consent','Preparation','Monitoring','Psychotherapy integration'].map((item)=><div key={item} className="flex items-center gap-3 rounded-2xl bg-white/10 p-4 text-white"><CheckCircle2 className="h-5 w-5 text-[#9fcf9a]"/><span className="font-medium text-white">{item}</span></div>)}</div></div></Card></div><div className="mt-10 text-center"><Button onClick={()=>navigate('new-patients')}>Book an Evaluation</Button></div></Section></>; }
+function FeesPage({ navigate }) { return <><PageHero icon={CreditCard} eyebrow="Fees & Insurance" title="Clear payment information before you begin." subtitle="Insurance and payment pathways should be confirmed before scheduling."/><Section><Card className="mx-auto max-w-5xl"><div className="grid gap-8 p-8 md:grid-cols-2"><div><h3 className="text-2xl font-semibold text-slate-950">Private practice care</h3><p className="mt-3 leading-7 text-slate-700">The private practice may operate out-of-network and may provide superbills when appropriate.</p></div><div><h3 className="text-2xl font-semibold text-slate-950">Insurance-based options</h3><p className="mt-3 leading-7 text-slate-700">Insurance-based appointments may be available through Headway for eligible plans. Please verify before scheduling.</p></div></div><div className="px-8 pb-8"><Button onClick={()=>navigate('contact')} variant="outline">Ask About Payment Options</Button></div></Card></Section></>; }
+function NewPatientsPage() { return <><PageHero icon={Calendar} eyebrow="New Patients" title="Book a Psychiatric Evaluation Intake Appointment." subtitle="Choose virtual or in-office care, then complete the official IntakeQ scheduling widget."/><Section><BookingExperience mode="new" defaultKey="evaluation-virtual"/></Section></>; }
+function CurrentPatientsPage() { return <><PageHero icon={Users} eyebrow="Current Patients" title="Follow-up appointments and patient portal access." subtitle="Use secure PracticeQ / IntakeQ links for follow-up scheduling and established-patient portal access."/><Section><BookingExperience mode="current" defaultKey="follow-up-virtual"/><div className="mt-10 grid gap-6 lg:grid-cols-2"><Card className="border-[#9fcf9a] bg-[#173f42] text-white shadow-xl"><div className="p-7"><LockKeyhole className="h-7 w-7 text-[#9fcf9a]"/><h3 className="mt-6 text-2xl font-semibold text-white">Patient Portal</h3><p className="mt-3 leading-7 text-white">Open the PracticeQ / IntakeQ portal for forms, secure messages, and office workflows.</p><ExternalButton href={LINKS.portal} variant="light" className="mt-6 w-full">Open Portal</ExternalButton></div></Card><div className="rounded-[1.75rem] border border-red-200 bg-red-50 p-7 text-red-950"><AlertTriangle className="h-7 w-7"/><h3 className="mt-5 text-2xl font-semibold">Urgent concerns</h3><p className="mt-3 leading-7">Do not use online scheduling or the portal for emergencies. Call 911, go to the nearest emergency department, or call/text 988 for mental health crisis support.</p></div></div></Section></>; }
+function ResourcesPage() { return <><PageHero icon={BookOpen} eyebrow="Resources" title="Education for thoughtful decisions." subtitle="A future article library to answer common questions."/><Section><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{['What Is Integrative Psychiatry?','What to Expect at Your First Psychiatric Evaluation','Medication Management and Psychotherapy','Ketamine-Assisted Psychotherapy','Adult ADHD and Diagnostic Clarity','Sleep, Stress, and Relationships'].map((title)=><Card key={title}><div className="p-7"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#2f8c85]">Article draft</p><h3 className="mt-4 text-xl font-semibold text-slate-950">{title}</h3><p className="mt-3 leading-7 text-slate-600">A future resource article for patients and referral sources.</p></div></Card>)}</div></Section></>; }
+function FAQPage() { const [open,setOpen]=useState('Holistic Care for Mental Wellness-0'); return <><PageHero icon={HelpCircle} eyebrow="FAQ" title="Frequently asked questions." subtitle="Answers adapted from the current FAQ content, with updated booking and location language."/><Section className="bg-slate-50"><div className="mx-auto max-w-5xl space-y-10">{FAQ_GROUPS.map((group)=><div key={group.title}><h2 className="mb-4 text-2xl font-semibold text-[#173f42]">{group.title}</h2><div className="space-y-3">{group.items.map(([q,a],i)=>{const key=`${group.title}-${i}`; return <div key={q} className="rounded-2xl border border-slate-200 bg-white shadow-sm"><button className="flex w-full items-center justify-between gap-4 p-5 text-left" onClick={()=>setOpen(open===key?'':key)}><span className="text-lg font-semibold text-slate-950">{q}</span><ChevronDown className={`h-5 w-5 shrink-0 text-slate-500 transition ${open===key?'rotate-180':''}`}/></button>{open===key&&<p className="px-5 pb-5 leading-7 text-slate-700">{a}</p>}</div>})}</div></div>)}</div></Section></>; }
+function ContactPage({ navigate }) { return <><PageHero icon={Mail} eyebrow="Contact" title="Start with the right next step." subtitle="Book directly, open the patient portal, or contact the practice for administrative questions."/><Section className="bg-[#173f42] text-white"><div className="grid gap-8 lg:grid-cols-2"><Card className="border-white/10 bg-white/5 text-white"><div className="p-8"><h3 className="text-2xl font-semibold text-white">Office information</h3><div className="mt-6 space-y-4 text-white"><p className="flex gap-3"><MapPin className="mt-1 h-5 w-5 text-[#9fcf9a]"/> {PRACTICE.address}</p><p className="flex gap-3"><Phone className="mt-1 h-5 w-5 text-[#9fcf9a]"/> {PRACTICE.phone}</p><p className="flex gap-3"><Mail className="mt-1 h-5 w-5 text-[#9fcf9a]"/> {PRACTICE.email}</p></div><div className="mt-6 grid gap-3"><Button onClick={()=>navigate('new-patients')} variant="light">Book New Patient Evaluation</Button><Button onClick={()=>navigate('current-patients')} variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">Current Patient Links</Button><ExternalButton href={LINKS.portal} variant="light" className="w-full">Open Patient Portal</ExternalButton></div></div></Card><div className="rounded-[2rem] border border-amber-200/30 bg-white/5 p-8"><AlertTriangle className="h-6 w-6 text-amber-100"/><h3 className="mt-4 text-2xl font-semibold text-white">For urgent needs</h3><p className="mt-3 leading-7 text-white">This website and online booking are not monitored for urgent clinical needs. Use emergency or crisis resources when needed.</p></div></div></Section></>; }
 
-function SectionHeading({ eyebrow, title, subtitle }) {
-  return <div className="mx-auto mb-12 max-w-3xl text-center">{eyebrow && <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">{eyebrow}</p>}<h2 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{title}</h2>{subtitle && <p className="mt-4 text-lg leading-8 text-slate-700">{subtitle}</p>}</div>;
-}
-
-function Header({ page, navigate }) {
-  const [open, setOpen] = useState(false);
-  const go = (id) => { setOpen(false); navigate(id); };
-  return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-        <button onClick={() => go('home')} className="flex items-center gap-3 text-left"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-950 text-white"><Brain className="h-5 w-5" /></div><div><p className="text-sm font-semibold text-slate-950">{PRACTICE.name}</p><p className="text-xs text-slate-600">{PRACTICE.doctor}</p></div></button>
-        <nav className="hidden items-center gap-5 lg:flex">{PAGES.slice(0, 7).map((item) => <button key={item.id} onClick={() => go(item.id)} className={`text-sm font-medium ${page === item.id ? 'text-emerald-900' : 'text-slate-700 hover:text-slate-950'}`}>{item.label}</button>)}</nav>
-        <div className="hidden items-center gap-3 lg:flex"><Button href={LINKS.portal} external variant="ghost"><LockKeyhole className="mr-2 h-4 w-4" /> Portal</Button><Button onClick={() => go('new-patients')}>Book Now</Button></div>
-        <Button variant="outline" className="lg:hidden" onClick={() => setOpen(!open)}>{open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}</Button>
-      </div>
-      {open && <div className="border-t border-slate-200 bg-white px-6 py-5 lg:hidden"><div className="grid gap-2">{PAGES.map((item) => { const Icon = item.icon; return <button key={item.id} onClick={() => go(item.id)} className="flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium text-slate-700"><Icon className="h-4 w-4" /> {item.label}</button>; })}<ExternalButton href={LINKS.portal} variant="outline" className="mt-2 w-full">Open Patient Portal</ExternalButton></div></div>}
-    </header>
-  );
-}
-
-function Footer({ navigate }) {
-  return <footer className="border-t border-slate-200 bg-white py-10"><div className="mx-auto grid max-w-7xl gap-8 px-6 text-sm text-slate-600 lg:grid-cols-2 lg:px-8"><div><p className="font-semibold text-slate-950">{PRACTICE.name} | {PRACTICE.doctor}</p><p className="mt-2">{PRACTICE.address}</p><p>{PRACTICE.phone} · {PRACTICE.email}</p><div className="mt-5 flex flex-wrap gap-3">{PAGES.slice(0, 7).map((item) => <button key={item.id} onClick={() => navigate(item.id)} className="hover:text-slate-950">{item.label}</button>)}<a href={LINKS.portal} target="_blank" rel="noreferrer" className="hover:text-slate-950">Patient Portal</a></div></div><div className="lg:text-right"><p>This website provides general information and is not medical advice.</p><p className="mt-4">© {new Date().getFullYear()} Integrative Psychiatry. All rights reserved.</p></div></div></footer>;
-}
-
-function BookingCard({ option, selected, onSelect }) {
-  const Icon = option.icon;
-  return (
-    <motion.button type="button" onClick={() => onSelect(option.key)} whileHover={{ y: -6 }} whileTap={{ scale: 0.99 }} className={`group relative overflow-hidden rounded-[2rem] border p-[1px] text-left shadow-xl transition ${selected ? 'border-emerald-300 shadow-emerald-900/20' : 'border-slate-200 shadow-slate-200/80 hover:border-emerald-200'}`}>
-      <div className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${option.tone}`} />
-      <div className="relative h-full rounded-[1.95rem] bg-white p-6">
-        <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${option.tone} opacity-10 blur-2xl transition group-hover:opacity-20`} />
-        <div className="flex items-start justify-between gap-4">
-          <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${option.tone} text-white shadow-lg shadow-emerald-900/20`}><Icon className="h-7 w-7" /></div>
-          <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${selected ? 'bg-emerald-950 text-white' : 'bg-slate-100 text-slate-600'}`}>{option.badge}</span>
-        </div>
-        <h3 className="mt-6 text-2xl font-semibold text-slate-950">{option.title}</h3>
-        <p className="mt-3 leading-7 text-slate-600">{option.subtitle}</p>
-        <div className="mt-6 flex items-center justify-between text-sm font-semibold text-emerald-900"><span>{selected ? 'Selected appointment' : 'Select appointment'}</span><ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div>
-      </div>
-    </motion.button>
-  );
-}
-
-function IntakeQWidget({ option }) {
-  useEffect(() => {
-    if (!option || typeof document === 'undefined') return undefined;
-    const container = document.getElementById('intakeq');
-    if (container) container.innerHTML = '';
-    document.querySelectorAll('script[data-intakeq-widget="true"]').forEach((script) => script.remove());
-    window.intakeq = INTAKEQ.accountId;
-    window.intakeqServiceId = option.serviceId;
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.src = INTAKEQ.scriptSrc;
-    script.dataset.intakeqWidget = 'true';
-    document.head.appendChild(script);
-    return () => {};
-  }, [option]);
-
-  if (!option) return null;
-
-  return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-white shadow-2xl shadow-emerald-950/20">
-      <div className={`h-2 bg-gradient-to-r ${option.tone}`} />
-      <div className="grid gap-0 lg:grid-cols-[0.42fr_0.58fr]">
-        <div className="relative overflow-hidden bg-slate-950 p-8 text-white">
-          <div className="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-emerald-400/20 blur-3xl" />
-          <div className="absolute -bottom-24 right-0 h-64 w-64 rounded-full bg-teal-300/10 blur-3xl" />
-          <div className="relative">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-200">PracticeQ booking scheduler</p>
-            <h3 className="mt-4 text-3xl font-semibold tracking-tight">{option.title}</h3>
-            <p className="mt-4 leading-7 text-slate-300">Secure scheduling is powered by IntakeQ / PracticeQ. Complete the booking flow in the panel to the right.</p>
-            <div className="mt-8 space-y-3 text-sm text-slate-200">
-              <div className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-emerald-200" /> Secure IntakeQ widget</div>
-              <div className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-emerald-200" /> {option.badge} scheduling path</div>
-              <div className="flex items-center gap-3"><CheckCircle2 className="h-5 w-5 text-emerald-200" /> Direct fallback link included</div>
-            </div>
-            <ExternalButton href={option.href} variant="light" className="mt-8 w-full">Open in New Window</ExternalButton>
-          </div>
-        </div>
-        <div className="bg-[radial-gradient(circle_at_top,#ecfdf5,transparent_35%),#ffffff] p-4 sm:p-6">
-          <div className="mx-auto max-w-[720px] rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-inner shadow-slate-100">
-            <div id="intakeq" style={{ maxWidth: '720px', width: '100%' }} />
-          </div>
-          <p className="mt-4 text-center text-sm text-slate-500">If the scheduler does not load, <a href={option.href} target="_blank" rel="noreferrer" className="font-semibold text-emerald-900 underline">open the secure booking page</a>.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function BookingExperience({ defaultKey = 'evaluation-virtual', mode = 'all' }) {
-  const options = mode === 'new' ? BOOKING_OPTIONS.slice(0, 2) : mode === 'current' ? BOOKING_OPTIONS.slice(2) : BOOKING_OPTIONS;
-  const [selectedKey, setSelectedKey] = useState(defaultKey);
-  const selected = options.find((option) => option.key === selectedKey) || options[0];
-  return (
-    <div className="relative">
-      <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-gradient-to-br from-emerald-100 via-white to-teal-100 blur-3xl" />
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {options.map((option) => <BookingCard key={option.key} option={option} selected={selected.key === option.key} onSelect={setSelectedKey} />)}
-      </div>
-      <div className="mt-8"><IntakeQWidget option={selected} /></div>
-    </div>
-  );
-}
-
-function HomePage({ navigate }) {
-  return <><section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,#ecfdf5,transparent_38%),linear-gradient(180deg,#ffffff,#f8fafc)] py-20 sm:py-28"><div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_.95fr] lg:px-8"><motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}><div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm text-emerald-900 shadow-sm"><ShieldCheck className="h-4 w-4" /> Board-certified psychiatry in Connecticut</div><h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl">Holistic psychiatry rooted in you.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-700">Personalized care that considers the whole you—mind, body, and spirit. {PRACTICE.doctor} provides integrative psychiatric care, psychotherapy, and medication management for adults in Connecticut.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button onClick={() => navigate('new-patients')} variant="dark">Book Evaluation <ArrowRight className="ml-2 h-4 w-4" /></Button><Button onClick={() => navigate('current-patients')} variant="outline">Current Patient Follow-Up</Button><Button href={LINKS.portal} external variant="ghost"><LockKeyhole className="mr-2 h-4 w-4" /> Portal</Button></div></motion.div><Card className="overflow-hidden border-0 shadow-2xl shadow-slate-200"><div className="bg-slate-950 p-8 text-white"><p className="text-sm uppercase tracking-[0.22em] text-emerald-200">Secure online scheduling</p><h2 className="mt-4 text-3xl font-semibold">A polished appointment concierge, powered by IntakeQ.</h2><p className="mt-4 text-slate-300">Choose your appointment type, then complete scheduling in the embedded PracticeQ booking scheduler.</p></div><div className="grid gap-3 bg-white p-4"><ExternalButton href={LINKS.evaluationVirtual} variant="dark" className="w-full">Book Virtual Evaluation</ExternalButton><ExternalButton href={LINKS.evaluationOffice} variant="outline" className="w-full">Book In-Office Evaluation</ExternalButton><ExternalButton href={LINKS.portal} className="w-full">Open Patient Portal</ExternalButton></div></Card></div></section><BookingOverview navigate={navigate} /><ServicePreview navigate={navigate} /></>;
-}
-
-function BookingOverview({ navigate }) {
-  return <Section className="bg-slate-50"><SectionHeading eyebrow="Appointments" title="A beautiful, secure way to schedule." subtitle="Select the appointment path that fits, then complete the official IntakeQ booking widget right on the page." /><BookingExperience mode="all" defaultKey="evaluation-virtual" /><div className="mt-8 text-center"><Button onClick={() => navigate('current-patients')} variant="outline">View Follow-Up Booking Options</Button></div></Section>;
-}
-
-function ServicePreview({ navigate }) {
-  return <Section><SectionHeading eyebrow="Services" title="Comprehensive care solutions." subtitle="Psychotherapy, medication management, evaluations, nutraceutical support, lifestyle recommendations, and other integrative options." /><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{SERVICES.slice(0, 6).map((service) => { const Icon = service.icon; return <Card key={service.title} className="transition hover:-translate-y-1 hover:shadow-xl"><div className="p-7"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-900"><Icon className="h-6 w-6" /></div><h3 className="mt-5 text-xl font-semibold text-slate-950">{service.title}</h3><p className="mt-3 leading-7 text-slate-600">{service.text}</p></div></Card>; })}</div><div className="mt-10 text-center"><Button onClick={() => navigate('services')} variant="outline">View All Services</Button></div></Section>;
-}
-
-function AboutPage() {
-  return <><PageHero icon={UserRound} eyebrow="Meet Dr. Z" title="Your partner in healing." subtitle="Dr. Douglas Zelisko, affectionately known as Dr. Z, is a board-certified psychiatrist with a deep commitment to holistic, personalized mental health care." /><Section><div className="grid gap-10 lg:grid-cols-[.85fr_1.15fr]"><Card className="bg-slate-50"><div className="p-8"><div className="flex h-24 w-24 items-center justify-center rounded-[2rem] bg-emerald-950 text-white"><UserRound className="h-12 w-12" /></div><h3 className="mt-6 text-2xl font-semibold text-slate-950">{PRACTICE.doctor}</h3><p className="mt-2 text-slate-600">Board-certified psychiatrist</p><div className="mt-6 space-y-3 text-sm text-slate-700">{TRAINING.map((item) => <p key={item} className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-800" /> {item}</p>)}</div></div></Card><div className="space-y-6 text-lg leading-8 text-slate-700"><p>Leading the practice is Dr. Douglas Zelisko, known warmly as Dr. Z. He brings a passion for holistic mental health care and a thoughtful, patient-centered style to every interaction. His approach is grounded in treating each person as a whole individual, not simply a list of symptoms.</p><p>Dr. Zelisko’s academic foundation includes degrees from Amherst College and St. George’s University School of Medicine, followed by psychiatry residency training at UConn School of Medicine. His commitment to ongoing learning helps keep care aligned with the evolving field of integrative psychiatry.</p><p>In treatment, Dr. Z integrates a range of therapeutic modalities, including psychotherapy, medication management, nutraceutical and supplement review, genetic insights when clinically useful, and comprehensive lifestyle coaching. The goal is to support each person’s unique journey with care that is collaborative, respectful of autonomy, and tailored to real-life goals.</p><p>Beyond his clinical work, Dr. Z enjoys road biking, running, and discovering mid-century modern design treasures. That commitment to balance and a fulfilling life reflects a principle he also encourages in his patients: healing is not only about reducing symptoms, but about building a life that feels more whole.</p></div></div></Section><Section className="bg-slate-50"><SectionHeading eyebrow="Treatment Philosophy" title="Holistic care that respects autonomy and context." subtitle="The practice blends evidence-based psychiatry with a wider view of mind, body, lifestyle, identity, and meaning." /><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{APPROACH_POINTS.map((item) => <Card key={item}><div className="p-6"><CheckCircle2 className="h-6 w-6 text-emerald-800" /><h3 className="mt-4 text-lg font-semibold text-slate-950">{item}</h3></div></Card>)}</div></Section></>;
-}
-
-function ServicesPage({ navigate }) {
-  return <><PageHero icon={Stethoscope} eyebrow="Services" title="Comprehensive care solutions." subtitle="Personalized care for a broad spectrum of concerns, delivered through an integrative, whole-person lens." /><Section><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{SERVICES.map((service) => { const Icon = service.icon; return <Card key={service.title}><div className="p-7"><div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-900"><Icon className="h-6 w-6" /></div><h3 className="mt-5 text-xl font-semibold text-slate-950">{service.title}</h3><p className="mt-3 leading-7 text-slate-600">{service.text}</p></div></Card>; })}</div><div className="mt-10 text-center"><Button onClick={() => navigate('new-patients')} variant="dark">Book an Evaluation</Button></div></Section></>;
-}
-
-function KetaminePage({ navigate }) {
-  return <><PageHero icon={Sparkles} eyebrow="Ketamine-Assisted Psychotherapy" title="A careful, clinically guided option for selected patients." subtitle="Ketamine-assisted psychotherapy may be considered only after evaluation, screening, preparation, informed consent, and safety review." /><Section><div className="grid gap-8 lg:grid-cols-[1fr_.8fr]"><div className="space-y-6 text-lg leading-8 text-slate-700"><p>Ketamine-assisted psychotherapy may be considered for carefully selected adults after a psychiatric evaluation, medical screening, discussion of risks and alternatives, preparation, and informed consent.</p><p>The psychotherapy component matters. Preparation and integration can help patients make sense of the experience and connect insights to daily life.</p></div><Card className="bg-slate-950 text-white shadow-xl"><div className="p-8"><h3 className="text-2xl font-semibold">A responsible process includes:</h3><div className="mt-6 space-y-4">{['Clinical evaluation', 'Medical and medication review', 'Informed consent', 'Preparation', 'Monitoring', 'Psychotherapy integration'].map((item) => <div key={item} className="flex items-center gap-3 rounded-2xl bg-white/5 p-4"><CheckCircle2 className="h-5 w-5 text-emerald-200" /> <span>{item}</span></div>)}</div></div></Card></div><div className="mt-10 text-center"><Button onClick={() => navigate('new-patients')}>Book an Evaluation</Button></div></Section></>;
-}
-
-function FeesPage({ navigate }) {
-  return <><PageHero icon={CreditCard} eyebrow="Fees & Insurance" title="Clear payment information before you begin." subtitle="Insurance and payment pathways should be confirmed before scheduling." /><Section><Card className="mx-auto max-w-5xl"><div className="grid gap-8 p-8 md:grid-cols-2"><div><h3 className="text-2xl font-semibold text-slate-950">Private practice care</h3><p className="mt-3 leading-7 text-slate-700">The private practice may operate out-of-network and may provide superbills when appropriate.</p></div><div><h3 className="text-2xl font-semibold text-slate-950">Insurance-based options</h3><p className="mt-3 leading-7 text-slate-700">Insurance-based appointments may be available through Headway for eligible plans. Please verify before scheduling.</p></div></div><div className="px-8 pb-8"><Button onClick={() => navigate('contact')} variant="outline">Ask About Payment Options</Button></div></Card></Section></>;
-}
-
-function NewPatientsPage() {
-  return <><PageHero icon={Calendar} eyebrow="New Patients" title="Book a Psychiatric Evaluation Intake Appointment." subtitle="Choose virtual or in-office care, then complete the official IntakeQ scheduling widget." /><Section><BookingExperience mode="new" defaultKey="evaluation-virtual" /></Section></>;
-}
-
-function CurrentPatientsPage() {
-  return <><PageHero icon={Users} eyebrow="Current Patients" title="Follow-up appointments and patient portal access." subtitle="Use secure PracticeQ / IntakeQ links for follow-up scheduling and established-patient portal access." /><Section><BookingExperience mode="current" defaultKey="follow-up-virtual" /><div className="mt-10 grid gap-6 lg:grid-cols-2"><Card className="border-emerald-200 bg-emerald-950 text-white shadow-xl"><div className="p-7"><LockKeyhole className="h-7 w-7" /><h3 className="mt-6 text-2xl font-semibold">Patient Portal</h3><p className="mt-3 leading-7 text-emerald-50">Open the PracticeQ / IntakeQ portal for forms, secure messages, and office workflows.</p><ExternalButton href={LINKS.portal} variant="light" className="mt-6 w-full">Open Portal</ExternalButton></div></Card><div className="rounded-[1.75rem] border border-red-200 bg-red-50 p-7 text-red-950"><AlertTriangle className="h-7 w-7" /><h3 className="mt-5 text-2xl font-semibold">Urgent concerns</h3><p className="mt-3 leading-7">Do not use online scheduling or the portal for emergencies. Call 911, go to the nearest emergency department, or call/text 988 for mental health crisis support.</p></div></div></Section></>;
-}
-
-function ResourcesPage() {
-  return <><PageHero icon={BookOpen} eyebrow="Resources" title="Education for thoughtful decisions." subtitle="A future article library to answer common questions." /><Section><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{['What Is Integrative Psychiatry?', 'What to Expect at Your First Psychiatric Evaluation', 'Medication Management and Psychotherapy', 'Ketamine-Assisted Psychotherapy', 'Adult ADHD and Diagnostic Clarity', 'Sleep, Stress, and Relationships'].map((title) => <Card key={title}><div className="p-7"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-800">Article draft</p><h3 className="mt-4 text-xl font-semibold text-slate-950">{title}</h3><p className="mt-3 leading-7 text-slate-600">A future resource article for patients and referral sources.</p></div></Card>)}</div></Section></>;
-}
-
-function FAQPage() {
-  const [openIndex, setOpenIndex] = useState(0);
-  const faqs = [
-    ['How do I book a new patient appointment?', 'Use the New Patients page and choose either virtual or in-office evaluation booking.'],
-    ['Where is the patient portal?', 'The patient portal is hosted through PracticeQ / IntakeQ at drz.intakeq.com/portal.'],
-    ['What are Dr. Z’s qualifications?', 'Dr. Zelisko is a board-certified psychiatrist with training at Amherst College, St. George’s University School of Medicine, and UConn School of Medicine.'],
-    ['What is integrative psychiatry?', 'It is personalized care that considers the whole person—mind, body, and spirit.'],
-  ];
-  return <><PageHero icon={HelpCircle} eyebrow="FAQ" title="Common questions before beginning care." /><Section className="bg-slate-50"><div className="mx-auto max-w-4xl space-y-3">{faqs.map(([q, a], index) => <div key={q} className="rounded-2xl border border-slate-200 bg-white shadow-sm"><button className="flex w-full items-center justify-between gap-4 p-5 text-left" onClick={() => setOpenIndex(openIndex === index ? -1 : index)}><span className="text-lg font-semibold text-slate-950">{q}</span><ChevronDown className={`h-5 w-5 shrink-0 text-slate-500 transition ${openIndex === index ? 'rotate-180' : ''}`} /></button>{openIndex === index && <p className="px-5 pb-5 leading-7 text-slate-700">{a}</p>}</div>)}</div></Section></>;
-}
-
-function ContactPage({ navigate }) {
-  return <><PageHero icon={Mail} eyebrow="Contact" title="Start with the right next step." subtitle="Book directly, open the patient portal, or contact the practice for administrative questions." /><Section className="bg-slate-950 text-white"><div className="grid gap-8 lg:grid-cols-2"><Card className="border-white/10 bg-white/5 text-white"><div className="p-8"><h3 className="text-2xl font-semibold">Office information</h3><div className="mt-6 space-y-4 text-slate-200"><p className="flex gap-3"><MapPin className="mt-1 h-5 w-5 text-emerald-200" /> {PRACTICE.address}</p><p className="flex gap-3"><Phone className="mt-1 h-5 w-5 text-emerald-200" /> {PRACTICE.phone}</p><p className="flex gap-3"><Mail className="mt-1 h-5 w-5 text-emerald-200" /> {PRACTICE.email}</p></div><div className="mt-6 grid gap-3"><Button onClick={() => navigate('new-patients')} variant="light">Book New Patient Evaluation</Button><Button onClick={() => navigate('current-patients')} variant="outline" className="border-white/30 bg-transparent text-white hover:bg-white/10">Current Patient Links</Button><ExternalButton href={LINKS.portal} variant="light" className="w-full">Open Patient Portal</ExternalButton></div></div></Card><div className="rounded-[2rem] border border-amber-200/30 bg-white/5 p-8"><AlertTriangle className="h-6 w-6 text-amber-100" /><h3 className="mt-4 text-2xl font-semibold">For urgent needs</h3><p className="mt-3 leading-7 text-slate-200">This website and online booking are not monitored for urgent clinical needs. Use emergency or crisis resources when needed.</p></div></div></Section></>;
-}
-
-function AppContent({ page, navigate }) {
-  const content = {
-    home: <HomePage navigate={navigate} />,
-    about: <AboutPage />,
-    services: <ServicesPage navigate={navigate} />,
-    ketamine: <KetaminePage navigate={navigate} />,
-    fees: <FeesPage navigate={navigate} />,
-    'new-patients': <NewPatientsPage />,
-    'current-patients': <CurrentPatientsPage />,
-    resources: <ResourcesPage />,
-    faq: <FAQPage />,
-    contact: <ContactPage navigate={navigate} />,
-  };
-  return content[page] || content.home;
-}
-
-export default function App() {
-  const [page, setPage] = useState(getPageFromPath);
-  useEffect(() => {
-    const handlePopState = () => setPage(getPageFromPath());
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-  function navigate(id) {
-    const path = PATH_BY_PAGE[id] || '/';
-    if (window.location.pathname !== path) window.history.pushState({}, '', path);
-    setPage(id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  return <div className="min-h-screen bg-white font-sans text-slate-950"><Header page={page} navigate={navigate} /><main><AppContent page={page} navigate={navigate} /></main><Footer navigate={navigate} /></div>;
-}
+function AppContent({ page, navigate }) { const content={home:<HomePage navigate={navigate}/>,about:<AboutPage/>,services:<ServicesPage navigate={navigate}/>,ketamine:<KetaminePage navigate={navigate}/>,fees:<FeesPage navigate={navigate}/>, 'new-patients':<NewPatientsPage/>, 'current-patients':<CurrentPatientsPage/>, resources:<ResourcesPage/>, faq:<FAQPage/>, contact:<ContactPage navigate={navigate}/>}; return content[page]||content.home; }
+export default function App() { const [page,setPage]=useState(getPageFromPath); useEffect(()=>{const h=()=>setPage(getPageFromPath()); window.addEventListener('popstate',h); return()=>window.removeEventListener('popstate',h);},[]); function navigate(id){const path=PATH_BY_PAGE[id]||'/'; if(window.location.pathname!==path) window.history.pushState({},'',path); setPage(id); window.scrollTo({top:0,behavior:'smooth'});} return <div className="min-h-screen bg-white font-sans text-slate-950"><Header page={page} navigate={navigate}/><main><AppContent page={page} navigate={navigate}/></main><Footer navigate={navigate}/></div>; }
