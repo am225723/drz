@@ -10,11 +10,15 @@ describe('website content integrations', () => {
     expect(app).toContain('https://drz.intakeq.com/portal');
   });
 
-  it('includes all four booking links', () => {
+  it('includes all four booking links and official IntakeQ service IDs', () => {
     expect(app).toContain('https://link.drz.services/veval');
     expect(app).toContain('https://link.drz.services/ieval');
     expect(app).toContain('https://link.drz.services/o');
     expect(app).toContain('https://link.drz.services/v');
+    expect(app).toContain('58193299-cfce-4354-b509-ce89f4aec3dc');
+    expect(app).toContain('f5586c2c-2dbd-4a55-878a-df83394ce608');
+    expect(app).toContain('20ee08a2-0586-4719-83fa-599c5aea1fc2');
+    expect(app).toContain('57f67047-59ad-4edf-8ab1-db9f0c072bad');
   });
 
   it('includes both new-patient and current-patient routes', () => {
@@ -22,9 +26,24 @@ describe('website content integrations', () => {
     expect(app).toContain("path: '/current-patients'");
   });
 
-  it('includes iframe fallback language for embedded booking', () => {
+  it('includes fallback language for embedded booking', () => {
     expect(app).toContain('If the scheduler does not load');
     expect(app).toContain('PracticeQ booking scheduler');
+  });
+});
+
+describe('brand and content updates', () => {
+  it('uses brand colors and asset references', () => {
+    expect(app).toContain("deep: '#173f42'");
+    expect(app).toContain("teal: '#2f8c85'");
+    expect(app).toContain("mint: '#9fcf9a'");
+    expect(app).toContain("logo: '/logo.png'");
+    expect(app).toContain("headshot: '/headshot.jpeg'");
+  });
+
+  it('removes the Nutraceutical Support service card', () => {
+    expect(app).not.toContain("title: 'Nutraceutical Support'");
+    expect(app).not.toContain('Supplement and lifestyle review when clinically appropriate.');
   });
 });
 
@@ -39,7 +58,6 @@ describe('About Dr. Z content from the original site', () => {
   it('includes Dr. Z holistic modalities and personal details', () => {
     expect(app).toContain('psychotherapy');
     expect(app).toContain('medication management');
-    expect(app).toContain('nutraceutical');
     expect(app).toContain('genetic insights');
     expect(app).toContain('lifestyle coaching');
     expect(app).toContain('road biking');
@@ -51,6 +69,17 @@ describe('About Dr. Z content from the original site', () => {
     expect(app).toContain('mind, body, and spirit');
     expect(app).toContain('whole individual');
     expect(app).toContain('Your partner in healing');
+  });
+});
+
+describe('FAQ content', () => {
+  it('includes expanded FAQ groups from the original site', () => {
+    expect(app).toContain('Holistic Care for Mental Wellness');
+    expect(app).toContain('Our Philosophy of Care');
+    expect(app).toContain('Services & Conditions Treated');
+    expect(app).toContain('Getting Started & Logistics');
+    expect(app).toContain('What is Integrative Psychiatry?');
+    expect(app).toContain('What should I expect during my first full appointment?');
   });
 });
 
