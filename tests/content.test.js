@@ -28,6 +28,31 @@ describe('website content integrations', () => {
   });
 });
 
+describe('About Dr. Z content from the original site', () => {
+  it('includes Dr. Z training and credentials', () => {
+    expect(app).toContain('Board-certified psychiatrist');
+    expect(app).toContain('Amherst College');
+    expect(app).toContain('St. George’s University School of Medicine');
+    expect(app).toContain('UConn School of Medicine');
+  });
+
+  it('includes Dr. Z holistic modalities and personal details', () => {
+    expect(app).toContain('psychotherapy');
+    expect(app).toContain('medication management');
+    expect(app).toContain('nutraceutical');
+    expect(app).toContain('genetic insights');
+    expect(app).toContain('lifestyle coaching');
+    expect(app).toContain('road biking');
+    expect(app).toContain('running');
+    expect(app).toContain('mid-century modern design');
+  });
+
+  it('includes the original whole-person positioning language', () => {
+    expect(app).toContain('mind, body, and spirit');
+    expect(app).toContain('whole individual');
+    expect(app).toContain('Your partner in healing');
+  });
+});
 
 describe('package dependency versions', () => {
   const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'));
