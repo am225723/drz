@@ -26,13 +26,14 @@ describe('website content integrations', () => {
     expect(app).toContain("path: '/current-patients'");
   });
 
-  it('includes fallback language for embedded booking', () => {
-    expect(app).toContain('If the scheduler does not load');
-    expect(app).toContain('PracticeQ booking scheduler');
+  it('routes legacy FAQ and commentary paths to the combined resources page', () => {
+    expect(app).toContain("'/faq': 'resources'");
+    expect(app).toContain("'/commentary': 'resources'");
+    expect(app).toContain("label: 'Resources & FAQ'");
   });
 });
 
-describe('brand and content updates', () => {
+describe('brand and visual updates', () => {
   it('uses brand colors and asset references', () => {
     expect(app).toContain("deep: '#173f42'");
     expect(app).toContain("teal: '#2f8c85'");
@@ -47,6 +48,17 @@ describe('brand and content updates', () => {
   });
 });
 
+describe('homepage practice expansion', () => {
+  it('includes practice methods and common care areas', () => {
+    expect(app).toContain('A wider lens for mental health');
+    expect(app).toContain('Psychodynamic psychotherapy');
+    expect(app).toContain('Ketamine-assisted therapy');
+    expect(app).toContain('Trauma-focused care');
+    expect(app).toContain('Common areas of care');
+    expect(app).toContain('ADHD and focus concerns');
+  });
+});
+
 describe('About Dr. Z content from the original site', () => {
   it('includes Dr. Z training and credentials', () => {
     expect(app).toContain('Board-certified psychiatrist');
@@ -55,30 +67,21 @@ describe('About Dr. Z content from the original site', () => {
     expect(app).toContain('UConn School of Medicine');
   });
 
-  it('includes Dr. Z holistic modalities and personal details', () => {
-    expect(app).toContain('psychotherapy');
-    expect(app).toContain('medication management');
-    expect(app).toContain('genetic insights');
-    expect(app).toContain('lifestyle coaching');
+  it('includes Dr. Z personal details', () => {
     expect(app).toContain('road biking');
     expect(app).toContain('running');
     expect(app).toContain('mid-century modern design');
   });
-
-  it('includes the original whole-person positioning language', () => {
-    expect(app).toContain('mind, body, and spirit');
-    expect(app).toContain('whole individual');
-    expect(app).toContain('Your partner in healing');
-  });
 });
 
-describe('FAQ content', () => {
-  it('includes expanded FAQ groups from the original site', () => {
+describe('combined Resources & FAQ content', () => {
+  it('includes resource article topics and FAQ groups', () => {
+    expect(app).toContain('What Is Holistic Psychiatry?');
+    expect(app).toContain('Beyond Medication: A Holistic View on Treating ADHD');
+    expect(app).toContain('Feeling Anxious? 5 Integrative Approaches to Find Calm');
     expect(app).toContain('Holistic Care for Mental Wellness');
-    expect(app).toContain('Our Philosophy of Care');
     expect(app).toContain('Services & Conditions Treated');
     expect(app).toContain('Getting Started & Logistics');
-    expect(app).toContain('What is Integrative Psychiatry?');
     expect(app).toContain('What should I expect during my first full appointment?');
   });
 });
