@@ -1,3 +1,4 @@
+'use client';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { ASSETS, CONDITIONS, METHODS, PRACTICE, SERVICES } from '../lib/content';
 import { BookingExperience, Button, Card, CheckList, Section, SectionHeading } from '../components/ui';
