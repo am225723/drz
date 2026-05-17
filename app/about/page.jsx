@@ -74,7 +74,7 @@ export default function AboutPage() {
               <img
                 src={signatureImage}
                 alt="Dr. Douglas Zelisko signature"
-                className="mt-3 h-auto w-full max-w-sm"
+                className="mt-3 h-auto w-1/2 max-w-[12rem]"
               />
               <p className="mt-2 text-base font-semibold text-slate-950">Dr. Douglas Zelisko</p>
               <p className="text-sm text-slate-600">“Dr. Z”</p>
