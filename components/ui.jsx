@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, CheckCircle2, ExternalLink, LockKeyhole, Menu, X } from 'lucide-react';
 import { ASSETS, INTAKEQ, LINKS, NAV, PRACTICE, BOOKING_OPTIONS } from '../lib/content';
 
@@ -27,16 +27,64 @@ export function Header() {
 }
 export function Footer() { return <footer className="border-t border-slate-200 bg-white py-10"><div className="mx-auto grid max-w-7xl gap-8 px-6 text-sm text-slate-600 lg:grid-cols-2 lg:px-8"><div><p className="font-semibold text-[#173f42]">{PRACTICE.name} | {PRACTICE.doctor}</p><p className="mt-2">{PRACTICE.address}</p><p>{PRACTICE.phone} · {PRACTICE.email}</p><div className="mt-5 flex flex-wrap gap-3">{NAV.map(([href, label]) => <Link key={href} href={href} className="hover:text-slate-950">{label}</Link>)}<a href={LINKS.portal} target="_blank" rel="noreferrer" className="hover:text-slate-950">Patient Portal</a></div></div><div className="lg:text-right"><p>This website provides general information and is not medical advice.</p><p className="mt-4">© {new Date().getFullYear()} Integrative Psychiatry. All rights reserved.</p></div></div></footer>; }
 
+function resetIntakeQGlobals(serviceId) {
+  window.intakeq = INTAKEQ.accountId;
+  window.intakeqServiceId = serviceId;
+  delete window.IntakeQ;
+  delete window.intakeQ;
+}
+
+function removeIntakeQScript() {
+  document.querySelectorAll('script[src^="https://intakeq.com/js/widget.min.js"]').forEach((script) => script.remove());
+}
+
 export function IntakeQWidget({ option }) {
+  const hostRef = useRef(null);
+  const [status, setStatus] = useState('loading');
+
   useEffect(() => {
-    const container = document.getElementById('intakeq');
-    if (container) container.innerHTML = '';
-    window.intakeq = INTAKEQ.accountId;
-    window.intakeqServiceId = option.serviceId;
-    let script = document.querySelector(`script[src="${INTAKEQ.scriptSrc}"]`);
-    if (!script) { script = document.createElement('script'); script.type = 'text/javascript'; script.async = true; script.src = INTAKEQ.scriptSrc; document.head.appendChild(script); }
-  }, [option]);
-  return <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-white shadow-2xl shadow-[#173f42]/20"><div className={`h-2 bg-gradient-to-r ${option.tone}`} /><div className="grid gap-0 lg:grid-cols-[0.42fr_0.58fr]"><div className="bg-[#173f42] p-8 text-white"><p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d6e7c7]">PracticeQ booking scheduler</p><h3 className="mt-4 text-3xl font-semibold tracking-tight text-white">{option.title}</h3><p className="mt-4 leading-7 text-slate-100">Secure scheduling is powered by IntakeQ / PracticeQ.</p><ExternalButton href={option.href} variant="light" className="mt-8 w-full">Open in New Window</ExternalButton></div><div className="bg-[radial-gradient(circle_at_top,#edf8f1,transparent_35%),#ffffff] p-4 sm:p-6"><div className="mx-auto max-w-[720px] rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-inner shadow-slate-100"><div id="intakeq" style={{ maxWidth: '720px', width: '100%' }} /></div><p className="mt-4 text-center text-sm text-slate-500">If the scheduler does not load, <a href={option.href} target="_blank" rel="noreferrer" className="font-semibold text-[#173f42] underline">open the secure booking page</a>.</p></div></div></div>;
+    let cancelled = false;
+    setStatus('loading');
+
+    const host = hostRef.current;
+    if (!host) return undefined;
+
+    host.innerHTML = '';
+    const widgetContainer = document.createElement('div');
+    widgetContainer.id = 'intakeq';
+    widgetContainer.style.maxWidth = '720px';
+    widgetContainer.style.width = '100%';
+    widgetContainer.style.minHeight = '620px';
+    host.appendChild(widgetContainer);
+
+    resetIntakeQGlobals(option.serviceId);
+    removeIntakeQScript();
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = `${INTAKEQ.scriptSrc}&service=${encodeURIComponent(option.serviceId)}&t=${Date.now()}`;
+    script.onload = () => {
+      if (!cancelled) setStatus('loaded');
+    };
+    script.onerror = () => {
+      if (!cancelled) setStatus('error');
+    };
+    document.head.appendChild(script);
+
+    const fallbackTimer = window.setTimeout(() => {
+      if (!cancelled && widgetContainer.children.length === 0) setStatus('fallback');
+    }, 3500);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallbackTimer);
+      script.remove();
+      if (host) host.innerHTML = '';
+    };
+  }, [option.key, option.serviceId]);
+
+  return <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-white shadow-2xl shadow-[#173f42]/20"><div className={`h-2 bg-gradient-to-r ${option.tone}`} /><div className="grid gap-0 lg:grid-cols-[0.42fr_0.58fr]"><div className="bg-[#173f42] p-8 text-white"><p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d6e7c7]">PracticeQ booking scheduler</p><h3 className="mt-4 text-3xl font-semibold tracking-tight text-white">{option.title}</h3><p className="mt-4 leading-7 text-slate-100">Secure scheduling is powered by IntakeQ / PracticeQ. If your browser blocks embedded scheduling, the direct secure link will still work.</p><ExternalButton href={option.href} variant="light" className="mt-8 w-full">Open Secure Scheduler</ExternalButton></div><div className="bg-[radial-gradient(circle_at_top,#edf8f1,transparent_35%),#ffffff] p-4 sm:p-6"><div className="mx-auto max-w-[760px] overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white p-3 shadow-inner shadow-slate-100"><div ref={hostRef} className="min-h-[620px] w-full" />{status === 'loading' && <div className="flex min-h-[220px] items-center justify-center rounded-2xl bg-slate-50 p-6 text-center text-sm font-semibold text-slate-500">Loading secure scheduler…</div>}{(status === 'error' || status === 'fallback') && <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-center"><p className="font-semibold text-amber-950">The embedded scheduler did not load in this browser.</p><p className="mt-2 text-sm leading-6 text-amber-900">Some privacy settings, browser extensions, or cross-site tracking restrictions can block embedded scheduling widgets.</p><ExternalButton href={option.href} variant="dark" className="mt-4">Open Secure Scheduler</ExternalButton></div>}</div><p className="mt-4 text-center text-sm text-slate-500">Trouble viewing it? <a href={option.href} target="_blank" rel="noreferrer" className="font-semibold text-[#173f42] underline">Open the secure booking page</a>.</p></div></div></div>;
 }
 export function BookingExperience({ mode = 'all', defaultKey = 'evaluation-virtual' }) {
   const options = mode === 'new' ? BOOKING_OPTIONS.slice(0, 2) : mode === 'current' ? BOOKING_OPTIONS.slice(2) : BOOKING_OPTIONS;
