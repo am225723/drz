@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" role="img" aria-labelledby="title desc">
+  <title id="title">Dr. Douglas Zelisko signature</title>
+  <desc id="desc">A stylized signature for Dr. Douglas Zelisko.</desc>
+  <rect width="760" height="200" fill="transparent"/>
+  <text x="34" y="122" font-family="Brush Script MT, Segoe Script, Lucida Handwriting, cursive" font-size="92" font-style="italic" fill="#173f42" stroke="#173f42" stroke-width="0.8" paint-order="stroke">
+    Douglas Zelisko
+  </text>
+  <path d="M40 152 C160 178, 300 170, 410 154 C520 138, 640 140, 720 158" fill="none" stroke="#2f8c85" stroke-width="4" stroke-linecap="round" opacity="0.45"/>
+</svg>
