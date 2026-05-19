@@ -2,15 +2,39 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CalendarCheck, CheckCircle2, ExternalLink, LockKeyhole, Menu, Phone, X } from 'lucide-react';
+import { ArrowRight, CalendarCheck, CheckCircle2, ChevronDown, ExternalLink, LockKeyhole, Menu, Phone, X } from 'lucide-react';
 import { ASSETS, INTAKEQ, LINKS, NAV, PRACTICE, BOOKING_OPTIONS } from '../lib/content';
 
-const desktopNav = [
-  ['/about', 'About'],
-  ['/services', 'Services'],
-  ['/ketamine-therapy', 'Ketamine'],
-  ['/resources', 'Resources & FAQ'],
-  ['/fees-insurance', 'Fees']
+const desktopNavGroups = [
+  {
+    title: 'About',
+    items: [
+      ['/about', 'About Dr. Zelisko', 'Read Dr. Z’s welcome letter and credentials.'],
+      ['/contact', 'Contact', 'Office information and non-urgent inquiry options.']
+    ]
+  },
+  {
+    title: 'Care',
+    items: [
+      ['/services', 'Services', 'Psychiatric evaluation, therapy, medication, and integrative care.'],
+      ['/ketamine-therapy', 'Ketamine-Assisted Psychotherapy', 'Candidacy, safety, process, and next steps.']
+    ]
+  },
+  {
+    title: 'Resources',
+    items: [
+      ['/resources', 'Resources & FAQ', 'Articles, education, and frequently asked questions.'],
+      ['/fees-insurance', 'Fees & Insurance', 'Payment pathways, insurance, and reimbursement information.']
+    ]
+  },
+  {
+    title: 'Patients',
+    items: [
+      ['/new-patients', 'New Patients', 'Schedule a psychiatric evaluation intake appointment.'],
+      ['/current-patients', 'Current Patients', 'Follow-up appointments and patient portal access.'],
+      [LINKS.portal, 'Patient Portal', 'Open secure PracticeQ / IntakeQ forms and messages.', true]
+    ]
+  }
 ];
 
 const mobileMenuGroups = [
@@ -58,6 +82,10 @@ function isActivePath(pathname, href) {
   return pathname === cleanHref || pathname.startsWith(`${cleanHref}/`);
 }
 
+function groupIsActive(pathname, group) {
+  return group.items.some(([href]) => isActivePath(pathname, href));
+}
+
 export function Button({ children, href, external = false, variant = 'primary', className = '', ...props }) {
   const base = 'inline-flex min-h-11 items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition';
   const styles = { primary: 'bg-[#173f42] text-white hover:bg-[#24565a]', dark: 'bg-slate-950 text-white hover:bg-slate-800', outline: 'border border-slate-300 bg-white text-slate-950 hover:bg-slate-50', ghost: 'bg-transparent text-slate-700 hover:bg-slate-100', light: 'border border-white/30 bg-white text-[#173f42] hover:bg-[#edf8f1]' }[variant];
@@ -80,6 +108,10 @@ function MobileMenuLink({ href, label, external = false, onClick, pathname }) {
   return <Link href={href} onClick={onClick} className={className}>{label}</Link>;
 }
 
+function DesktopNavMenu({ group, isOpen, active, onToggle, onClose, pathname }) {
+  return <div className="relative"><button type="button" aria-haspopup="menu" aria-expanded={isOpen} onClick={onToggle} className={`inline-flex min-h-12 items-center gap-1.5 rounded-2xl px-4 text-[15px] font-semibold transition ${active || isOpen ? 'bg-[#edf8f1] text-[#173f42]' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-950'}`}>{group.title}<ChevronDown className={`h-4 w-4 transition ${isOpen ? 'rotate-180' : ''}`} /></button>{isOpen && <div role="menu" className="absolute left-0 top-[calc(100%+0.65rem)] z-[70] w-80 overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-300/50"><div className="mb-1 px-4 py-3"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2f8c85]">{group.title}</p><p className="mt-1 text-sm text-slate-500">Choose a page below.</p></div>{group.items.map(([href, label, description, external]) => { const itemActive = isActivePath(pathname, href); const className = `block rounded-2xl px-4 py-3 transition ${itemActive ? 'bg-[#edf8f1]' : 'hover:bg-slate-50'}`; const content = <><span className="block text-sm font-bold text-slate-950">{label}</span><span className="mt-1 block text-sm leading-5 text-slate-600">{description}</span></>; return external ? <a key={label} role="menuitem" href={href} target="_blank" rel="noreferrer" onClick={onClose} className={className}>{content}</a> : <Link key={label} role="menuitem" href={href} onClick={onClose} className={className}>{content}</Link>; })}</div>}</div>;
+}
+
 function MobileBottomBar() {
   return <nav className="fixed inset-x-0 bottom-0 z-[60] border-t border-slate-200 bg-white/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-12px_30px_rgba(15,23,42,0.12)] backdrop-blur-xl lg:hidden" aria-label="Quick actions"><div className="mx-auto grid max-w-md grid-cols-3 gap-2"><a href="tel:+18606153629" className="flex min-h-14 flex-col items-center justify-center rounded-2xl bg-slate-50 px-3 text-xs font-semibold text-slate-700"><Phone className="mb-1 h-5 w-5 text-[#173f42]" />Call</a><Link href="/new-patients" className="flex min-h-14 flex-col items-center justify-center rounded-2xl bg-[#173f42] px-3 text-xs font-semibold text-white"><CalendarCheck className="mb-1 h-5 w-5" />Book</Link><a href={LINKS.portal} target="_blank" rel="noreferrer" className="flex min-h-14 flex-col items-center justify-center rounded-2xl bg-[#edf8f1] px-3 text-xs font-semibold text-[#173f42]"><LockKeyhole className="mb-1 h-5 w-5" />Portal</a></div></nav>;
 }
@@ -87,12 +119,14 @@ function MobileBottomBar() {
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [openDesktopMenu, setOpenDesktopMenu] = useState(null);
 
   useEffect(() => {
     setOpen(false);
+    setOpenDesktopMenu(null);
   }, [pathname]);
 
-  return <><header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl"><div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8"><Link href="/" className="flex min-h-14 items-center gap-3 rounded-2xl px-2 py-1 text-left transition hover:bg-slate-50" onClick={() => setOpen(false)}><img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="h-12 w-12 rounded-2xl object-contain" /><div><p className="text-sm font-semibold text-[#173f42]">{PRACTICE.name}</p><p className="text-xs text-slate-600">{PRACTICE.doctor}</p></div></Link><nav className="hidden items-center gap-2 lg:flex" aria-label="Primary navigation">{desktopNav.map(([href, label]) => <Link key={href} href={href} aria-current={isActivePath(pathname, href) ? 'page' : undefined} className={`inline-flex min-h-12 items-center rounded-2xl px-4 text-[15px] font-semibold transition ${isActivePath(pathname, href) ? 'bg-[#edf8f1] text-[#173f42]' : 'text-slate-700 hover:bg-slate-50 hover:text-slate-950'}`}>{label}</Link>)}</nav><div className="hidden items-center gap-3 lg:flex"><Button href={LINKS.portal} external variant="ghost" className="min-h-12 px-5"><LockKeyhole className="mr-2 h-4 w-4" /> Patient Portal</Button><Button href="/new-patients" className="min-h-12 px-6">Schedule Evaluation</Button></div><button type="button" aria-label={open ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={open} onClick={() => setOpen(!open)} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-300 bg-white text-slate-900 shadow-sm lg:hidden">{open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button></div>{open && <div className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-slate-200 bg-white px-5 py-5 shadow-2xl lg:hidden"><div className="mb-5 grid grid-cols-2 gap-3"><Link href="/new-patients" onClick={() => setOpen(false)} className="rounded-2xl bg-[#173f42] px-4 py-4 text-center text-sm font-bold text-white">Schedule Evaluation</Link><a href={LINKS.portal} target="_blank" rel="noreferrer" onClick={() => setOpen(false)} className="rounded-2xl bg-[#edf8f1] px-4 py-4 text-center text-sm font-bold text-[#173f42]">Patient Portal</a></div><div className="grid gap-4">{mobileMenuGroups.map((group) => <section key={group.title} className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4"><h2 className="text-sm font-bold uppercase tracking-[0.18em] text-[#2f8c85]">{group.title}</h2><p className="mt-1 text-sm text-slate-500">{group.description}</p><div className="mt-3 grid gap-2">{group.items.map(([href, label, external]) => <MobileMenuLink key={`${group.title}-${label}`} href={href} label={label} external={Boolean(external)} onClick={() => setOpen(false)} pathname={pathname} />)}</div></section>)}</div><div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950"><strong>Emergency?</strong> Call 911, go to the nearest emergency room, or call/text 988.</div></div>}</header><MobileBottomBar /></>;
+  return <><header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl"><div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8"><Link href="/" className="flex min-h-14 items-center gap-3 rounded-2xl px-2 py-1 text-left transition hover:bg-slate-50" onClick={() => { setOpen(false); setOpenDesktopMenu(null); }}><img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="h-12 w-12 rounded-2xl object-contain" /><div><p className="text-sm font-semibold text-[#173f42]">{PRACTICE.name}</p><p className="text-xs text-slate-600">{PRACTICE.doctor}</p></div></Link><nav className="hidden items-center gap-2 lg:flex" aria-label="Primary navigation">{desktopNavGroups.map((group) => <DesktopNavMenu key={group.title} group={group} isOpen={openDesktopMenu === group.title} active={groupIsActive(pathname, group)} pathname={pathname} onToggle={() => setOpenDesktopMenu(openDesktopMenu === group.title ? null : group.title)} onClose={() => setOpenDesktopMenu(null)} />)}</nav><div className="hidden items-center gap-3 lg:flex"><Button href={LINKS.portal} external variant="ghost" className="min-h-12 px-5"><LockKeyhole className="mr-2 h-4 w-4" /> Patient Portal</Button><Button href="/new-patients" className="min-h-12 px-6">Schedule Evaluation</Button></div><button type="button" aria-label={open ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={open} onClick={() => setOpen(!open)} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-300 bg-white text-slate-900 shadow-sm lg:hidden">{open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button></div>{open && <div className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-slate-200 bg-white px-5 py-5 shadow-2xl lg:hidden"><div className="mb-5 grid grid-cols-2 gap-3"><Link href="/new-patients" onClick={() => setOpen(false)} className="rounded-2xl bg-[#173f42] px-4 py-4 text-center text-sm font-bold text-white">Schedule Evaluation</Link><a href={LINKS.portal} target="_blank" rel="noreferrer" onClick={() => setOpen(false)} className="rounded-2xl bg-[#edf8f1] px-4 py-4 text-center text-sm font-bold text-[#173f42]">Patient Portal</a></div><div className="grid gap-4">{mobileMenuGroups.map((group) => <section key={group.title} className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4"><h2 className="text-sm font-bold uppercase tracking-[0.18em] text-[#2f8c85]">{group.title}</h2><p className="mt-1 text-sm text-slate-500">{group.description}</p><div className="mt-3 grid gap-2">{group.items.map(([href, label, external]) => <MobileMenuLink key={`${group.title}-${label}`} href={href} label={label} external={Boolean(external)} onClick={() => setOpen(false)} pathname={pathname} />)}</div></section>)}</div><div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950"><strong>Emergency?</strong> Call 911, go to the nearest emergency room, or call/text 988.</div></div>}</header><MobileBottomBar /></>;
 }
 
 export function Footer() { const legal = [['/privacy-policy','Privacy Policy'], ['/notice-of-privacy-practices','Notice of Privacy Practices'], ['/terms-of-use','Terms of Use'], ['/emergency-disclaimer','Emergency Disclaimer']]; return <footer className="border-t border-slate-200 bg-white py-10 pb-28 lg:pb-10"><div className="mx-auto grid max-w-7xl gap-8 px-6 text-sm text-slate-600 lg:grid-cols-2 lg:px-8"><div><p className="font-semibold text-[#173f42]">{PRACTICE.name} | {PRACTICE.doctor}</p><p className="mt-2">{PRACTICE.address}</p><p>{PRACTICE.phone} · {PRACTICE.email}</p><div className="mt-5 flex flex-wrap gap-3">{NAV.map(([href, label]) => <Link key={href} href={href} className="hover:text-slate-950">{label}</Link>)}<a href={LINKS.portal} target="_blank" rel="noreferrer" className="hover:text-slate-950">Patient Portal</a></div><div className="mt-4 flex flex-wrap gap-3 border-t border-slate-200 pt-4">{legal.map(([href, label]) => <Link key={href} href={href} className="font-medium text-[#173f42] hover:text-slate-950">{label}</Link>)}</div></div><div className="lg:text-right"><p>This website is for informational purposes only and does not provide medical advice, diagnosis, or treatment. Submitting a form or sending a message does not establish a doctor-patient relationship. If you are experiencing an emergency, call 911, go to the nearest emergency room, or call/text 988.</p><p className="mt-4">© {new Date().getFullYear()} Integrative Psychiatry. All rights reserved.</p></div></div></footer>; }
