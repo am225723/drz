@@ -16,7 +16,9 @@ const desktopNavGroups = [
   {
     title: 'Care',
     items: [
-      ['/services', 'Services', 'Psychiatric evaluation, therapy, medication, and integrative care.'],
+      ['/services', 'Services Overview', 'Explore psychiatric evaluation, therapy, medication, and integrative care.'],
+      ['/services/psychotherapy', 'Psychotherapy', 'A reflective therapeutic approach for patterns, relationships, and emotional life.'],
+      ['/services/medication-management', 'Medication Management', 'Thoughtful prescribing, monitoring, and medication decisions within a broader plan.'],
       ['/ketamine-therapy', 'Ketamine-Assisted Psychotherapy', 'Candidacy, safety, process, and next steps.']
     ]
   },
@@ -59,7 +61,9 @@ const mobileMenuGroups = [
     title: 'Learn',
     description: 'Understand care options and resources.',
     items: [
-      ['/services', 'Services'],
+      ['/services', 'Services Overview'],
+      ['/services/psychotherapy', 'Psychotherapy'],
+      ['/services/medication-management', 'Medication Management'],
       ['/ketamine-therapy', 'Ketamine-Assisted Psychotherapy'],
       ['/resources', 'Resources & FAQ']
     ]
