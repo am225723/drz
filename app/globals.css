@@ -5,3 +5,7 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; background: #fff; color: #0f172a; }
 :focus-visible { outline: 3px solid #9fcf9a; outline-offset: 3px; }
+
+button.group:has(> div.absolute) { text-align: center; }
+button.group:has(> div.absolute) > div.relative { display: flex; flex-direction: column; align-items: center; }
+button.group:has(> div.absolute) > div.relative > .mt-6.flex { width: 100%; justify-content: center; gap: 0.5rem; }
