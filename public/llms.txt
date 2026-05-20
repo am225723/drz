@@ -1,0 +1,38 @@
+# Integrative Psychiatry
+
+> Integrative Psychiatry is a physician-led psychiatry practice in West Hartford, Connecticut, led by Douglas Zelisko, MD.
+
+This site is intended for prospective and current patients seeking information about appointment pathways, practice services, fees and insurance, resources, and contact information.
+
+## Core Pages
+
+- [Home](https://site.docz.space/): Practice overview, philosophy of care, services, and scheduling pathways.
+- [About Dr. Zelisko](https://site.docz.space/about): Physician background, training, and care philosophy.
+- [Services](https://site.docz.space/services): Overview of psychiatric evaluation, psychotherapy, medication management, integrative psychiatry, and related care.
+- [Psychotherapy](https://site.docz.space/services/psychotherapy): Information about psychotherapy services.
+- [Medication Management](https://site.docz.space/services/medication-management): Information about medication management services.
+- [Resources & FAQ](https://site.docz.space/resources): Educational resources and frequently asked questions.
+- [Fees & Insurance](https://site.docz.space/fees-insurance): Payment pathways, private-pay information, superbills, and insurance-related details.
+- [Ketamine-Assisted Psychotherapy](https://site.docz.space/ketamine-therapy): Information about the ketamine-assisted psychotherapy pathway.
+- [New Patients](https://site.docz.space/new-patients): Scheduling pathway for new patient evaluation appointments.
+- [Current Patients](https://site.docz.space/current-patients): Follow-up appointment and patient portal links.
+- [Contact](https://site.docz.space/contact): Office location, phone, email, contact form, and administrative contact options.
+
+## Key Topics
+
+- Comprehensive psychiatric evaluations
+- Psychodynamic psychotherapy
+- Medication management
+- ADHD and focus concerns
+- Anxiety and mood concerns
+- Trauma and PTSD
+- Grief and life transitions
+- Integrative psychiatry
+- Ketamine-assisted psychotherapy
+
+## Legal and Policy Pages
+
+- [Privacy Policy](https://site.docz.space/privacy-policy)
+- [Notice of Privacy Practices](https://site.docz.space/notice-of-privacy-practices)
+- [Terms of Use](https://site.docz.space/terms-of-use)
+- [Emergency Disclaimer](https://site.docz.space/emergency-disclaimer)
