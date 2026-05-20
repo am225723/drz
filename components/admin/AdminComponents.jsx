@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getSupabaseBrowserClient } from '../../lib/supabasePublic';
 
-const nav = [['/admin','Dashboard'],['/admin/submissions','Submissions'],['/admin/articles','Articles'],['/admin/faqs','FAQs'],['/admin/pages','Pages']];
+const nav = [['/admin','Dashboard'],['/admin/submissions','Submissions'],['/admin/articles','Articles'],['/admin/faq','FAQs'],['/admin/pages','Pages']];
 const roleCanEdit = (role) => ['admin','editor'].includes(role);
 
 function client() {
