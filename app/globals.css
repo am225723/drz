@@ -2,8 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-html { scroll-behavior: smooth; }
-body { margin: 0; background: #fff; color: #0f172a; }
+html {
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #0f172a;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}
+
+main {
+  overflow-x: clip;
+}
+
+img,
+video,
+canvas,
+svg,
+iframe {
+  max-width: 100%;
+}
+
+/* Full-page and mobile scroll-capture support:
+   keep the page in normal document flow so iOS/Android full-page screenshots,
+   browser capture tools, and PDF-style captures do not duplicate sticky/fixed UI. */
+header.sticky {
+  position: static;
+  top: auto;
+}
+
+nav[aria-label="Quick actions"] {
+  display: none;
+}
+
 :focus-visible { outline: 3px solid #9fcf9a; outline-offset: 3px; }
 .photo-grain::after {
   content: '';
