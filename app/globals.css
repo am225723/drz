@@ -5,7 +5,16 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; background: #fff; color: #0f172a; }
 :focus-visible { outline: 3px solid #9fcf9a; outline-offset: 3px; }
-
+.photo-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.32) 1px, transparent 0);
+  background-size: 12px 12px;
+  mix-blend-mode: soft-light;
+  opacity: .28;
+}
 button.group:has(> div.absolute) { text-align: center; }
 button.group:has(> div.absolute) > div.relative { display: flex; flex-direction: column; align-items: center; }
 button.group:has(> div.absolute) > div.relative > .mt-6.flex { width: 100%; justify-content: center; gap: 0.5rem; }
