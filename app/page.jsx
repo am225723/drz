@@ -28,12 +28,6 @@ const conditionItems = [
   'Stress Management & Panic Disorders'
 ];
 
-const integrativeApproachItems = [
-  'Psychodynamic Psychotherapy',
-  'Ketamine-Assisted Psychotherapy',
-  'Mind-Body Medicine & Genetic Insights'
-];
-
 const emphasisCards = [
   { title: 'Psychotherapy', href: '/services/psychotherapy', icon: MessageCircle, image: STOCK_IMAGES.journalDesk, text: 'A reflective space to understand patterns, emotions, relationships, history, and the meaning beneath symptoms.', accent: 'from-[#edf8f1] to-white border-[#9fcf9a]' },
   { title: 'Medication Management', href: '/services/medication-management', icon: Pill, image: STOCK_IMAGES.consultationRoom, text: 'Thoughtful prescribing, medication review, monitoring, and collaborative decision-making within a whole-person care plan.', accent: 'from-[#f3f8f8] to-white border-[#2f8c85]' }
@@ -60,7 +54,7 @@ export default function HomePage() {
         </div>
         <div className="mx-auto mt-14 grid max-w-5xl items-center gap-8 lg:grid-cols-[.82fr_1.18fr]">
           <div className="overflow-hidden rounded-[2.25rem] border border-slate-200 bg-white p-3 shadow-xl shadow-slate-200/70"><img src={ASSETS.headshot} alt="Dr. Douglas Zelisko portrait" className="mx-auto max-h-[410px] rounded-[1.75rem] object-cover" /></div>
-          <Card className="overflow-hidden shadow-xl"><div className="grid gap-0 md:grid-cols-[.48fr_.52fr]"><div className="bg-[#173f42] p-8 text-white"><p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d6e7c7]">Meet Douglas Zelisko, MD</p><h2 className="mt-3 text-3xl font-semibold text-white">Board-certified integrative psychiatric care.</h2><p className="mt-4 leading-7 text-slate-100">Dr. Douglas Zelisko is a board-certified psychiatrist offering integrative psychiatric care for adults. His work combines psychiatric evaluation, psychotherapy, medication management, and whole-person treatment planning.</p><Button href="/about" variant="light" className="mt-6">Learn More About Dr. Zelisko</Button></div><div className="space-y-6 p-8"><div><h3 className="mb-4 text-lg font-semibold text-slate-950">Credentials</h3><ul className="space-y-3">{credentialItems.map((item) => <CheckItem key={item}>{item}</CheckItem>)}</ul></div><div><h3 className="mb-4 text-lg font-semibold text-slate-950">Conditions Treated</h3><ul className="space-y-3">{conditionItems.map((item) => <CheckItem key={item}>{item}</CheckItem>)}</ul></div><div><h3 className="mb-4 text-lg font-semibold text-slate-950">Integrative Approach</h3><ul className="space-y-3">{integrativeApproachItems.map((item) => <CheckItem key={item}>{item}</CheckItem>)}</ul></div></div></div></Card>
+          <Card className="overflow-hidden shadow-xl"><div className="grid gap-0 md:grid-cols-[.48fr_.52fr]"><div className="bg-[#173f42] p-8 text-white"><p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#d6e7c7]">Meet Douglas Zelisko, MD</p><h2 className="mt-3 text-3xl font-semibold text-white">Board-certified integrative psychiatric care.</h2><p className="mt-4 leading-7 text-slate-100">Dr. Douglas Zelisko is a board-certified psychiatrist offering integrative psychiatric care for adults. His work combines psychiatric evaluation, psychotherapy, medication management, and whole-person treatment planning.</p><Button href="/about" variant="light" className="mt-6">Learn More About Dr. Zelisko</Button></div><div className="space-y-6 p-8"><div><h3 className="mb-4 text-lg font-semibold text-slate-950">Credentials</h3><ul className="space-y-3">{credentialItems.map((item) => <CheckItem key={item}>{item}</CheckItem>)}</ul></div><div><h3 className="mb-4 text-lg font-semibold text-slate-950">Conditions Treated</h3><ul className="space-y-3">{conditionItems.map((item) => <CheckItem key={item}>{item}</CheckItem>)}</ul></div></div></div></Card>
         </div>
       </div>
     </section>
