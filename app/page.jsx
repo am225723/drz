@@ -48,7 +48,7 @@ export default function HomePage() {
             <img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="h-44 w-44 object-contain sm:h-52 sm:w-52 lg:h-64 lg:w-64" />
           </div>
           <div className="text-center lg:text-left">
-            <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">Holistic psychiatry rooted in you.</h1>
+            <h1 className="font-cormorant-sc text-4xl font-semibold uppercase leading-[1.03] tracking-[0.08em] text-slate-950 sm:text-6xl lg:text-7xl">Holistic psychiatry rooted in you.</h1>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-700 lg:mx-0">Personalized mental health care with depth and discretion. {PRACTICE.doctor} provides in-depth assessment, psychotherapy, thoughtful medication management, and collaborative treatment planning.</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start"><Button href="/new-patients" variant="primary">Book Evaluation <ArrowRight className="ml-2 h-4 w-4" /></Button><Button href="/services" variant="outline">Explore Services</Button></div>
           </div>
