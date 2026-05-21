@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,6 +35,10 @@ canvas,
 svg,
 iframe {
   max-width: 100%;
+}
+
+.font-cormorant-sc {
+  font-family: 'Cormorant SC', serif;
 }
 
 /* Full-page and mobile scroll-capture support:
