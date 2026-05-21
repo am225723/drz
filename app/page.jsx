@@ -28,14 +28,17 @@ const emphasisCards = [
 export default function HomePage() {
   return <>
     <section className="relative isolate overflow-hidden bg-[#fbfaf7] py-16 sm:py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#edf8f1,transparent_30%),radial-gradient(circle_at_86%_18%,rgba(232,216,184,.42),transparent_26%),linear-gradient(180deg,#fbfaf7,#ffffff)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,#edf8f1,transparent_32%),radial-gradient(circle_at_86%_18%,rgba(232,216,184,.42),transparent_26%),linear-gradient(180deg,#fbfaf7,#ffffff)]" />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="mx-auto mb-7 h-32 w-32 object-contain sm:h-40 sm:w-40" />
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#cfe0d8] bg-white/85 px-4 py-2 text-sm font-semibold text-[#173f42] shadow-sm backdrop-blur"><ShieldCheck className="h-4 w-4" /> Board-certified psychiatry for adults</div>
-          <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">Holistic psychiatry rooted in you.</h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-700">Personalized mental health care with depth and discretion. {PRACTICE.doctor} provides in-depth assessment, psychotherapy, thoughtful medication management, and collaborative treatment planning.</p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Button href="/new-patients" variant="primary">Book Evaluation <ArrowRight className="ml-2 h-4 w-4" /></Button><Button href="/services" variant="outline">Explore Services</Button></div>
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[.36fr_.64fr] lg:gap-16">
+          <div className="flex justify-center lg:justify-end">
+            <img src={ASSETS.logo} alt="Integrative Psychiatry logo" className="h-44 w-44 object-contain sm:h-52 sm:w-52 lg:h-64 lg:w-64" />
+          </div>
+          <div className="text-center lg:text-left">
+            <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">Holistic psychiatry rooted in you.</h1>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-slate-700 lg:mx-0">Personalized mental health care with depth and discretion. {PRACTICE.doctor} provides in-depth assessment, psychotherapy, thoughtful medication management, and collaborative treatment planning.</p>
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start"><Button href="/new-patients" variant="primary">Book Evaluation <ArrowRight className="ml-2 h-4 w-4" /></Button><Button href="/services" variant="outline">Explore Services</Button></div>
+          </div>
         </div>
         <div className="mx-auto mt-14 grid max-w-5xl items-center gap-8 lg:grid-cols-[.82fr_1.18fr]">
           <div className="overflow-hidden rounded-[2.25rem] border border-slate-200 bg-white p-3 shadow-xl shadow-slate-200/70"><img src={ASSETS.headshot} alt="Dr. Douglas Zelisko portrait" className="mx-auto max-h-[410px] rounded-[1.75rem] object-cover" /></div>
