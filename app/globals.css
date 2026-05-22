@@ -80,15 +80,25 @@ main .body-font-heading {
 }
 
 header.sticky {
-  position: static;
+  position: relative;
   top: auto;
+  z-index: 100;
+  overflow: visible;
+}
+
+header.sticky nav[aria-label="Primary navigation"] {
+  overflow: visible;
 }
 
 nav[aria-label="Quick actions"] {
   display: none;
 }
 
-:focus-visible { outline: 3px solid #9fcf9a; outline-offset: 3px; }
+:focus-visible {
+  outline: 3px solid #9fcf9a;
+  outline-offset: 3px;
+}
+
 .photo-grain::after {
   content: '';
   position: absolute;
@@ -99,6 +109,3 @@ nav[aria-label="Quick actions"] {
   mix-blend-mode: soft-light;
   opacity: .28;
 }
-button.group:has(> div.absolute) { text-align: center; }
-button.group:has(> div.absolute) > div.relative { display: flex; flex-direction: column; align-items: center; }
-button.group:has(> div.absolute) > div.relative > .mt-6.flex { width: 100%; justify-content: center; gap: 0.5rem; }
