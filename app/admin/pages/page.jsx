@@ -1,7 +1,5 @@
-import { PagesAdmin } from '../../../components/admin/AdminComponents';
-
-export const metadata = { title: 'Admin Pages | Integrative Psychiatry' };
+import { PagesAdminEnhanced } from '../../../components/admin/PagesAdminEnhanced';
 
 export default function AdminPagesPage() {
-  return <PagesAdmin />;
+  return <PagesAdminEnhanced />;
 }
