@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -16,6 +16,7 @@ body {
   color: #0f172a;
   max-width: 100%;
   overflow-x: clip;
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
 @supports not (overflow: clip) {
@@ -37,13 +38,47 @@ iframe {
   max-width: 100%;
 }
 
-.font-cormorant-sc {
+.font-cormorant-sc,
+.font-display-sc {
   font-family: 'Cormorant SC', serif;
 }
 
-/* Full-page and mobile scroll-capture support:
-   keep the page in normal document flow so iOS/Android full-page screenshots,
-   browser capture tools, and PDF-style captures do not duplicate sticky/fixed UI. */
+.font-dm-sans,
+.font-body-ui {
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+main h1,
+main h2,
+main h3,
+main p.uppercase {
+  font-family: 'Cormorant SC', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.08;
+}
+
+main p,
+main li,
+main a,
+main button {
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+main h1,
+main h2,
+main h3 {
+  font-weight: 600;
+}
+
+main .faq-question,
+main .body-font-heading {
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: 1.35;
+}
+
 header.sticky {
   position: static;
   top: auto;
