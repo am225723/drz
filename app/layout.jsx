@@ -5,6 +5,15 @@ export const metadata = {
   title: 'Integrative Psychiatry | Douglas Zelisko, MD',
   description: 'Integrative psychiatric care, psychotherapy, medication management, and secure online booking with Douglas Zelisko, MD in West Hartford, Connecticut.',
   metadataBase: new URL('https://drzelisko.com'),
+  icons: {
+    icon: [
+      { url: '/logo.png', type: 'image/png' }
+    ],
+    shortcut: ['/logo.png'],
+    apple: [
+      { url: '/logo.png', type: 'image/png' }
+    ]
+  }
 };
 
 const physicianSchema = {
