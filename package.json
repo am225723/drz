@@ -6,8 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "hostinger:start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",
