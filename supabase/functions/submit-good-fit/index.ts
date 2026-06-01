@@ -107,7 +107,13 @@ function buildEmailBody(payload: Record<string, unknown>, id: string) {
     textBlock("Mobile", payload.mobile),
     textBlock("Current location", payload.currentLocation),
     textBlock("Location eligibility", payload.locationEligibility),
-    textBlock("Contact preference", payload.contactPreference),
+    textBlock("Allowed contact methods", payload.allowedContactMethods),
+    textBlock("Preferred contact method", payload.preferredContactMethod),
+    textBlock("Best contact time", payload.bestContactTime),
+    textBlock(
+      "Contact preference compatibility field",
+      payload.contactPreference,
+    ),
     textBlock("Voicemail consent", payload.voicemailConsent),
     textBlock("Communication consent", payload.communicationConsent),
     "",
@@ -244,6 +250,11 @@ function validate(payload: Record<string, unknown>) {
   if (!str(payload.dob)) return "Date of birth is required.";
   if (!str(payload.currentLocation)) return "Current location is required.";
   if (!str(payload.presentingSummary)) return "Presenting summary is required.";
+  if (
+    !arr(payload.allowedContactMethods).length &&
+    !arr(payload.contactPreference).length
+  )
+    return "At least one allowed contact method is required.";
   if (!bool(payload.communicationConsent))
     return "Communication consent is required.";
   if (!bool(payload.acknowledgment)) return "Acknowledgment is required.";
@@ -314,7 +325,9 @@ Deno.serve(async (req) => {
       email,
       mobile: str(payload.mobile),
       current_location: str(payload.currentLocation),
-      contact_preference: arr(payload.contactPreference),
+      contact_preference: arr(payload.allowedContactMethods).length
+        ? arr(payload.allowedContactMethods)
+        : arr(payload.contactPreference),
       voicemail_consent:
         bool(payload.voicemailConsent) || bool(payload.communicationConsent),
       appointment_goals: arr(payload.appointmentGoals),
@@ -370,6 +383,15 @@ Deno.serve(async (req) => {
           : "",
         str(payload.schedulingTimeline)
           ? `Scheduling timeline: ${str(payload.schedulingTimeline)}`
+          : "",
+        arr(payload.allowedContactMethods).length
+          ? `Allowed contact methods: ${arr(payload.allowedContactMethods).join(", ")}`
+          : "",
+        str(payload.preferredContactMethod)
+          ? `Preferred contact method: ${str(payload.preferredContactMethod)}`
+          : "",
+        str(payload.bestContactTime)
+          ? `Best contact time: ${str(payload.bestContactTime)}`
           : "",
         bool(payload.communicationConsent)
           ? "Communication consent: Yes"
