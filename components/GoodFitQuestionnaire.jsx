@@ -669,6 +669,42 @@ export default function GoodFitQuestionnaire() {
               the nearest emergency room, or call/text 988.
             </p>
           </div>
+          <div className="mt-6 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 text-slate-700">
+            <h2 className="text-lg font-semibold text-slate-950">
+              Privacy note
+            </h2>
+            <div className="mt-3 space-y-4 text-sm leading-7">
+              <p>
+                This questionnaire asks for sensitive health information so the
+                practice can determine whether this may be an appropriate
+                clinical fit. Please share only what feels necessary for initial
+                fit screening. If care is established, a more complete history
+                can be reviewed during the evaluation.
+              </p>
+              <p>
+                Form submissions are used for scheduling, administrative review,
+                and clinical fit screening. This form is not monitored as an
+                emergency service.
+              </p>
+              <p className="text-slate-600">
+                For more information, please review our{" "}
+                <a
+                  href="/privacy-policy"
+                  className="font-semibold text-[#173f42] underline underline-offset-4"
+                >
+                  Privacy Policy
+                </a>{" "}
+                and{" "}
+                <a
+                  href="/notice-of-privacy-practices"
+                  className="font-semibold text-[#173f42] underline underline-offset-4"
+                >
+                  HIPAA Notice
+                </a>
+                .
+              </p>
+            </div>
+          </div>
           <div className="mt-6 grid gap-5 lg:grid-cols-2">
             <InfoCard
               title="This practice may be a good fit if you are looking for:"
@@ -1417,6 +1453,26 @@ export default function GoodFitQuestionnaire() {
                   value={form.additionalContext}
                   onChange={(e) => set("additionalContext", e.target.value)}
                 />
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Please avoid including information you do not want reviewed
+                  for initial scheduling or fit-screening purposes. A full
+                  clinical history can be discussed during an evaluation if care
+                  is established. For more information, please review our{" "}
+                  <a
+                    href="/privacy-policy"
+                    className="font-semibold text-[#173f42] underline underline-offset-4"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="/notice-of-privacy-practices"
+                    className="font-semibold text-[#173f42] underline underline-offset-4"
+                  >
+                    HIPAA Notice
+                  </a>
+                  .
+                </p>
               </Field>
             </div>
             <div className="mt-5">
