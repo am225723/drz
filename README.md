@@ -21,6 +21,9 @@ The website now supports a Supabase-powered backend for:
 - Contact form submissions
 - Admin login
 - Submission review
+- AI-assisted submission response drafting
+- Quo SMS sending from the submission detail page
+- Gmail sending from the submission detail page
 - Article CMS
 - FAQ CMS
 - Page/content JSON CMS
@@ -71,6 +74,33 @@ EMAIL_PROVIDER=resend
 RESEND_API_KEY=YOUR_RESEND_API_KEY
 ```
 
+Admin submission communication API route secrets:
+
+```bash
+# Required for the Next.js admin API route
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+OPENAI_MODEL=gpt-4o-mini
+
+# Quo SMS
+QUO_API_KEY=YOUR_QUO_API_KEY
+QUO_FROM_NUMBER_ID=PNxxxxxxxx
+QUO_USER_ID=USxxxxxxxx # optional
+QUO_API_URL=https://api.openphone.com/v1/messages
+
+# Gmail send
+GMAIL_CLIENT_ID=YOUR_GOOGLE_OAUTH_CLIENT_ID
+GMAIL_CLIENT_SECRET=YOUR_GOOGLE_OAUTH_CLIENT_SECRET
+GMAIL_REFRESH_TOKEN=YOUR_GOOGLE_REFRESH_TOKEN_WITH_GMAIL_SEND_SCOPE
+GMAIL_FROM=support@drzelisko.com
+```
+
+The Gmail OAuth refresh token should be generated with this scope:
+
+```text
+https://www.googleapis.com/auth/gmail.send
+```
+
 Supported `EMAIL_PROVIDER` values in the Edge Function:
 - `resend` using `RESEND_API_KEY`
 - `postmark` using `POSTMARK_SERVER_TOKEN`
@@ -89,25 +119,28 @@ supabase login
 supabase link --project-ref YOUR_PROJECT_REF
 ```
 
-4. Apply the migration:
+4. Apply the migrations:
 
 ```bash
 supabase db push
 ```
 
-The migration file is:
+The migration files include:
 
 ```text
 supabase/migrations/20260101000000_admin_cms_contact.sql
+supabase/migrations/20260101004000_submission_communication_log.sql
+supabase/migrations/20260608000000_enhance_submission_communication_log.sql
 ```
 
-It creates:
+They create:
 - `profiles`
 - `contact_submissions`
 - `pages`
 - `articles`
 - `faqs`
 - `audit_log`
+- `communication_log`
 - Row Level Security policies
 - Role helpers
 
@@ -168,6 +201,20 @@ Roles:
 
 Note: the FAQ editor route is `/admin/faq`.
 
+## Admin submission communication workflow
+
+On `/admin/submissions/[id]`, the admin can:
+
+1. Choose SMS through Quo or email through Gmail.
+2. Select a message purpose and tone.
+3. Draft the message with AI.
+4. Edit the message manually.
+5. Save a draft, copy the draft, or send it.
+6. Review and approve the message before sending.
+7. View the recent communication log for that submission.
+
+Messages are sent only from the server-side Next.js API route at `/api/admin/submission-message`; Quo, Gmail, OpenAI, and Supabase service-role secrets must never be exposed to the browser.
+
 ## Contact form testing checklist
 
 1. Set all Vercel/hosting public env vars.
@@ -180,6 +227,8 @@ Note: the FAQ editor route is `/admin/faq`.
 8. Confirm no PHI appears in browser console, deployment logs, or function logs.
 9. Confirm `/admin/submissions` can view the submission after login.
 10. Mark it reviewed and confirm status changes.
+11. Open `/admin/submissions/[id]`, draft a test response, save it, and confirm it appears in `communication_log`.
+12. Send a test SMS and test email only after Quo and Gmail secrets are configured.
 
 ## CMS behavior
 
