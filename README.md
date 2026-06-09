@@ -22,6 +22,7 @@ The website now supports a Supabase-powered backend for:
 - Admin login
 - Submission review
 - AI-assisted submission response drafting
+- Cloudflare Workers AI or OpenAI drafting provider support
 - Quo SMS sending from the submission detail page
 - Gmail sending from the submission detail page
 - Article CMS
@@ -79,6 +80,21 @@ Admin submission communication API route secrets:
 ```bash
 # Required for the Next.js admin API route
 SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+
+# AI drafting provider: choose cloudflare or openai
+AI_PROVIDER=cloudflare
+
+# Cloudflare Workers AI drafting
+CLOUDFLARE_ACCOUNT_ID=YOUR_CLOUDFLARE_ACCOUNT_ID
+CLOUDFLARE_API_TOKEN=YOUR_CLOUDFLARE_WORKERS_AI_API_TOKEN
+CLOUDFLARE_AI_MODEL=@cf/google/gemma-4-26b-a4b-it
+
+# Optional generic aliases used by the route
+AI_API_KEY=YOUR_AI_API_KEY
+AI_BASE_URL=https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1
+AI_MODEL=@cf/google/gemma-4-26b-a4b-it
+
+# OpenAI fallback, only needed if AI_PROVIDER=openai
 OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 OPENAI_MODEL=gpt-4o-mini
 
@@ -201,6 +217,28 @@ Roles:
 
 Note: the FAQ editor route is `/admin/faq`.
 
+## Cloudflare Workers AI setup
+
+1. In Cloudflare, open Workers AI and choose REST API.
+2. Create a Workers AI API token.
+3. Copy your Account ID.
+4. Add these environment variables to your host:
+
+```bash
+AI_PROVIDER=cloudflare
+CLOUDFLARE_ACCOUNT_ID=YOUR_ACCOUNT_ID
+CLOUDFLARE_API_TOKEN=YOUR_TOKEN
+CLOUDFLARE_AI_MODEL=@cf/google/gemma-4-26b-a4b-it
+```
+
+The route will call:
+
+```text
+https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1/chat/completions
+```
+
+Cloudflare Workers AI is used only for drafting admin messages. The admin must still review and approve before sending.
+
 ## Admin submission communication workflow
 
 On `/admin/submissions/[id]`, the admin can:
@@ -213,7 +251,7 @@ On `/admin/submissions/[id]`, the admin can:
 6. Review and approve the message before sending.
 7. View the recent communication log for that submission.
 
-Messages are sent only from the server-side Next.js API route at `/api/admin/submission-message`; Quo, Gmail, OpenAI, and Supabase service-role secrets must never be exposed to the browser.
+Messages are sent only from the server-side Next.js API route at `/api/admin/submission-message`; Quo, Gmail, OpenAI, Cloudflare, and Supabase service-role secrets must never be exposed to the browser.
 
 ## Contact form testing checklist
 
