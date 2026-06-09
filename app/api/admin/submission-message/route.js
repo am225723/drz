@@ -52,7 +52,7 @@ function hasSafetySignals(row) {
     row.risk_level,
     row.safety_concerns,
   ].map(value => String(value || '').toLowerCase()).join(' ');
-  return Boolean(row.risk_flag) || /(suicid|self-harm|self harm|kill myself|hurt myself|harm others|unsafe|crisis|emergency|hospital)/i.test(combined);
+  return Boolean(row.risk_flag) || /(risk|unsafe|crisis|emergency|hospital|988|911|higher level of care)/i.test(combined);
 }
 
 function submissionSummary(row) {
@@ -97,7 +97,7 @@ function fallbackDraft({ channel, purpose, submission }) {
     if (safety) {
       return {
         subject: '',
-        body: `Hi ${name}, thank you for reaching out. Based on what you shared, this may need more immediate support than our outpatient office can provide. If you feel unsafe or may harm yourself, please call 988, 911, or go to the nearest ER.`,
+        body: `Hi ${name}, thank you for reaching out. Based on what you shared, this may need more immediate support than our outpatient office can provide. If you feel unsafe, please call 988, 911, or go to the nearest ER.`,
         warnings: ['Safety language was included because this submission may require urgent resources.'],
       };
     }
@@ -115,47 +115,107 @@ function fallbackDraft({ channel, purpose, submission }) {
   };
 }
 
-async function draftWithAI({ channel, tone, instruction, purpose, submission }) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return fallbackDraft({ channel, purpose, submission });
+function aiProviderConfig() {
+  const provider = clean(process.env.AI_PROVIDER || 'openai').toLowerCase();
 
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+  if (provider === 'cloudflare' || provider === 'workers-ai' || provider === 'workers_ai') {
+    const accountId = clean(process.env.CLOUDFLARE_ACCOUNT_ID || process.env.AI_ACCOUNT_ID);
+    const apiKey = clean(process.env.CLOUDFLARE_API_TOKEN || process.env.CLOUDFLARE_API_KEY || process.env.AI_API_KEY);
+    const baseUrl = clean(process.env.CLOUDFLARE_AI_BASE_URL || process.env.AI_BASE_URL) || (accountId ? `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/v1` : '');
+    return {
+      provider: 'cloudflare',
+      apiKey,
+      baseUrl,
+      model: clean(process.env.CLOUDFLARE_AI_MODEL || process.env.AI_MODEL) || '@cf/google/gemma-4-26b-a4b-it',
+      useResponseFormat: false,
+    };
+  }
+
+  return {
+    provider: 'openai',
+    apiKey: clean(process.env.OPENAI_API_KEY || process.env.AI_API_KEY),
+    baseUrl: clean(process.env.OPENAI_BASE_URL || process.env.AI_BASE_URL) || 'https://api.openai.com/v1',
+    model: clean(process.env.OPENAI_MODEL || process.env.AI_MODEL) || 'gpt-4o-mini',
+    useResponseFormat: true,
+  };
+}
+
+function extractJsonObject(text) {
+  const raw = clean(text);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch {}
+
+  const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced?.[1]) {
+    try { return JSON.parse(fenced[1].trim()); } catch {}
+  }
+
+  const start = raw.indexOf('{');
+  const end = raw.lastIndexOf('}');
+  if (start >= 0 && end > start) {
+    try { return JSON.parse(raw.slice(start, end + 1)); } catch {}
+  }
+  return null;
+}
+
+async function createAIChatCompletion({ messages, model, temperature }) {
+  const config = aiProviderConfig();
+  if (!config.apiKey || !config.baseUrl) return null;
+
+  const requestBody = {
+    model: config.model || model,
+    temperature,
+    messages,
+  };
+
+  if (config.useResponseFormat) requestBody.response_format = { type: 'json_object' };
+
+  const response = await fetch(`${config.baseUrl.replace(/\/$/, '')}/chat/completions`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${config.apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) return null;
+  const data = await response.json().catch(() => null);
+  return data?.choices?.[0]?.message?.content || '';
+}
+
+async function draftWithAI({ channel, tone, instruction, purpose, submission }) {
+  const config = aiProviderConfig();
+  if (!config.apiKey || !config.baseUrl) return fallbackDraft({ channel, purpose, submission });
+
   const safety = hasSafetySignals(submission);
   const prompt = `Draft a ${channel === 'sms' ? 'brief SMS text message' : 'professional email'} from Dr. Zelisko's office / Integrative Psychiatry to a person who submitted a website questionnaire.\n\nPurpose: ${purpose || 'Follow up'}\nTone: ${tone || 'Warm and professional'}\nAdmin instruction: ${instruction || 'Follow up politely and guide the person to next steps.'}\n\nRules:\n- Return JSON only with keys subject, body, and warnings. warnings must be an array of strings.\n- Do not diagnose.\n- Do not promise acceptance into care.\n- Do not promise medication, stimulants, ketamine, or a specific treatment.\n- Do not include diagnosis labels, risk details, trauma details, medication details, or questionnaire specifics in SMS.\n- SMS must be concise, ideally under 320 characters and never over 1600 characters.\n- Email may be warmer and more complete.\n- Include the crisis/emergency disclaimer if safety/risk signal is Yes or if the purpose is higher level of care.\n- Make clear that the questionnaire does not establish a doctor-patient relationship when appropriate.\n- Sign emails as Dr. Zelisko's Office.\n\nSafety/risk signal: ${safety ? 'Yes' : 'No'}\n\nSubmission summary:\n${submissionSummary(submission)}`;
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model,
-      temperature: 0.35,
-      messages: [
-        { role: 'system', content: 'You draft cautious, warm, professional administrative communications for a psychiatry practice. Protect privacy and do not include unnecessary clinical details.' },
-        { role: 'user', content: prompt },
-      ],
-      response_format: { type: 'json_object' },
-    }),
+  const content = await createAIChatCompletion({
+    model: config.model,
+    temperature: 0.35,
+    messages: [
+      { role: 'system', content: 'You draft cautious, warm, professional administrative communications for a psychiatry practice. Protect privacy and do not include unnecessary clinical details. Return valid JSON only.' },
+      { role: 'user', content: prompt },
+    ],
   });
 
-  if (!response.ok) return fallbackDraft({ channel, purpose, submission });
-  const data = await response.json();
-  try {
-    const parsed = JSON.parse(data.choices?.[0]?.message?.content || '{}');
-    const draft = {
-      subject: safeHeader(parsed.subject) || (channel === 'email' ? 'Follow-up from Dr. Zelisko\'s Office' : ''),
-      body: clean(parsed.body),
-      warnings: Array.isArray(parsed.warnings) ? parsed.warnings.map(clean).filter(Boolean) : [],
-    };
-    if (!draft.body) return fallbackDraft({ channel, purpose, submission });
-    if (channel === 'sms' && draft.body.length > 1600) {
-      draft.body = draft.body.slice(0, 1597).trimEnd() + '...';
-      draft.warnings.push('The SMS draft was shortened to fit Quo\'s 1,600-character limit.');
-    }
-    if (safety && draft.warnings.length === 0) draft.warnings.push('This submission may include safety concerns. Review carefully before sending.');
-    return draft;
-  } catch {
-    return fallbackDraft({ channel, purpose, submission });
+  if (!content) return fallbackDraft({ channel, purpose, submission });
+
+  const parsed = extractJsonObject(content);
+  if (!parsed) return fallbackDraft({ channel, purpose, submission });
+
+  const draft = {
+    subject: safeHeader(parsed.subject) || (channel === 'email' ? 'Follow-up from Dr. Zelisko\'s Office' : ''),
+    body: clean(parsed.body),
+    warnings: Array.isArray(parsed.warnings) ? parsed.warnings.map(clean).filter(Boolean) : [],
+  };
+
+  if (!draft.body) return fallbackDraft({ channel, purpose, submission });
+  if (channel === 'sms' && draft.body.length > 1600) {
+    draft.body = draft.body.slice(0, 1597).trimEnd() + '...';
+    draft.warnings.push('The SMS draft was shortened to fit Quo\'s 1,600-character limit.');
   }
+  if (safety && draft.warnings.length === 0) draft.warnings.push('This submission may include safety concerns. Review carefully before sending.');
+  if (config.provider === 'cloudflare') draft.warnings.push('Drafted with Cloudflare Workers AI. Review carefully before sending.');
+  return draft;
 }
 
 function normalizeE164(raw) {
